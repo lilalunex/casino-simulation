@@ -15,7 +15,53 @@ php casino.php
 
 ## Showcase
 
-![alt Image of possible simulation](ReadmeFeatures1.png "Image of possible simulation")
+```
+user@machine:~/code/casino-simulation$ php casino.php 
+
+Casino Simulation.
+
+Date:   01st 01 2000
+Budget: 1,000,000.00 €
+
+Choose what to do next
+
+1 or enter: Simulate a day.
+2: Simulate a week.
+3: Simulate a month (31 days).
+4: Simulate a year (365 days).
+
+h: Help, I'm lost.
+g: Give up.
+e: Exit.
+
+Your input: 1
+
+__________________________________________
+
+Running simulation for 1 day(s).
+
+Total visitors: 66
+You won: 201,326 €
+
+__________________________________________
+
+Date:   02nd 01 2000
+Budget: 1,201,326.00 €
+
+Choose what to do next
+
+1 or enter: Simulate a day.
+2: Simulate a week.
+3: Simulate a month (31 days).
+4: Simulate a year (365 days).
+
+h: Help, I'm lost.
+g: Give up.
+e: Exit.
+
+Your input: 
+
+```
 
 ---
 
