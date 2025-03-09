@@ -13,7 +13,7 @@ php casino.php
 
 ---
 
-## How it looks like
+## Showcase
 
 ![alt Image of possible simulation](ReadmeFeatures1.png "Image of possible simulation")
 
@@ -62,3 +62,5 @@ Only tested on my Windows machine.
 [ ] On Game Over show the stats of the day
 
 [ ] Improve code
+
+[ ] Write Tests
