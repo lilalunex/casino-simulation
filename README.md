@@ -81,6 +81,10 @@ Only tested on my Windows machine.
 
 ## Ideas / CANDOs:
 
+[ ] Add expanses: employees, rent, lights, water, food, misc
+
+[ ] Event: Repair/buy machines / furniture again
+
 [ ] Calc months & years correct (28 days, 366 days)
 
 [ ] Have closed on day X? And/Or holidays?
