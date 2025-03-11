@@ -113,7 +113,11 @@ echo stats & info for that
 
 [ ] Option to take another credit -> Choice of 3, different capital & interest rates 
 
-[ ] Event: Casino has to close down for a week, for whatever reason
+[ ] Event: Casino has to close down for a week, for whatever reason (water damage)
+
+[ ] Idea: Gang wants protection money
+
+[ ] Idea: Fight happened in the Casino
 
 [ ] Chance Dealer doesn't show up for work -> no income for that game for the day
 
@@ -130,6 +134,12 @@ accordingly to amount of owned machines -> turning this into an incremental game
 
 [ ] Idea: Storyline -> User has to take loan first, so he/she understands there is one and gives immersion
 to the """world"""
+
+[ ] Daily Login Bonus
+
+[ ] User can give Casino a name
+
+[ ] (Holding the users hand through the entire process: Printing step by step and teaching what is up, instead of ...)
 
 [ ] When doing actual game gamePlay loop: Simulate until action of user is required or random event happened. + Option 
 to not hold on event + input to stop simulation
