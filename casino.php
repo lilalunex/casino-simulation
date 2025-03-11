@@ -315,35 +315,24 @@ class Visitor
         $playCount = 0;
         $moneyBeforePlaying = $this->money;
 
-        echo "plays BJ\n";
-
         while ($this->money > 0) {
             $this->gamesPlayed++;
             $bet = min(rand(5, 100), $this->money);
             $winChance = rand(0, 100);
 
-            echo "moneybefore: " . $this->money . "\n";
-            echo "bet: " . $bet . "\n";
-
             switch (true) {
                 case ($winChance <= $chanceBlackJackWin):
-                    echo "wonBJ\n";
                     $this->money += $bet * 2;
                     break;
                 case ($winChance <= $chanceRegularWin):
-                    echo "wonRegular\n";
                     $this->money += $bet;
                     break;
                 case ($winChance <= $chanceNoWin):
-                    echo "wonNothing\n";
                     $this->money -= $bet;
                     break;
             }
 
             $playCount++;
-
-            echo "moneyafter: " . $this->money . "\n";
-            echo "\n";
 
             if ($this->calcuateChanceToStopPlaying($playCount)) {
                 break;
