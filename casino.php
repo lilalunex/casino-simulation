@@ -85,6 +85,9 @@ class Casino
 //                case '5':
 //                    $this->simulate();
 //                    break;
+                case ctype_digit($input):
+                    $this->simulate((int) $input);
+                    break;
                 case 'h':
                     $this->displayHelp();
                     break;
@@ -135,6 +138,8 @@ class Casino
         echo "3: Simulate a month (31 days)." . PHP_EOL;
         echo "4: Simulate a year (365 days)." . PHP_EOL;
 //        echo "5: Simulate until (maybe) a new digit is appended." . PHP_EOL;
+        echo PHP_EOL;
+        echo "Integer: Simulate for that amount of days." . PHP_EOL;
         echo PHP_EOL;
         echo "h: Help, I'm lost." . PHP_EOL;
         echo "g: Give up." . PHP_EOL;
