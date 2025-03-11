@@ -84,9 +84,17 @@ class Casino
                     break;
                 case '5':
                     $lengthBefore = strlen((string)abs(floor($this->budget)));
+                    $daysBefore = $this->date;
+                    $visitorsBefore = $this->totalVisitors;
+                    $budgetBefore = $this->budget;
                     while ($lengthBefore == strlen((string)abs(floor($this->budget)))) {
                         $this->simulate(1, false);
                     }
+                    echo PHP_EOL;
+                    echo "Ran simulation for " . $this->date - $daysBefore . " day(s)." . PHP_EOL;
+                    echo PHP_EOL;
+                    echo "Total visitors: " . $this->totalVisitors - $visitorsBefore . PHP_EOL;
+                    $this->displayRevenue($budgetBefore);
                     break;
                 case ctype_digit($input):
                     $this->simulate((int)$input);
@@ -98,13 +106,13 @@ class Casino
                     $this->giveUp();
                     break;
                 case 'e':
-                    echo "Exiting." . PHP_EOL;
+                    echo "Exiting . " . PHP_EOL;
                     echo PHP_EOL;
                     exit;
                 default:
                     $this->displayInstructions = false;
                     echo PHP_EOL;
-                    echo "Invalid input. Please try again." . PHP_EOL;
+                    echo "Invalid input . Please try again . " . PHP_EOL;
                     echo "Your input: ";
                     echo PHP_EOL;
             }
@@ -128,7 +136,7 @@ class Casino
     public function displayIntro(): void
     {
         echo PHP_EOL;
-        echo "Casino Simulation." . PHP_EOL;
+        echo "Casino Simulation . " . PHP_EOL;
         echo PHP_EOL;
     }
 
@@ -137,13 +145,13 @@ class Casino
         echo PHP_EOL;
         echo "Choose what to do next" . PHP_EOL;
         echo PHP_EOL;
-        echo "1 or enter: Simulate a day." . PHP_EOL;
-        echo "2: Simulate a week." . PHP_EOL;
-        echo "3: Simulate a month (31 days)." . PHP_EOL;
-        echo "4: Simulate a year (365 days)." . PHP_EOL;
-        echo "5: Simulate until amount of digits change." . PHP_EOL;
+        echo "1 or enter: Simulate a day. " . PHP_EOL;
+        echo "2: Simulate a week. " . PHP_EOL;
+        echo "3: Simulate a month(31 days)." . PHP_EOL;
+        echo "4: Simulate a year(365 days)." . PHP_EOL;
+        echo "5: Simulate until amount of digits change . " . PHP_EOL;
         echo PHP_EOL;
-        echo "Integer: Simulate for that amount of days." . PHP_EOL;
+        echo "Integer: Simulate for that amount of days . " . PHP_EOL;
         echo PHP_EOL;
         echo "h: Help, I'm lost." . PHP_EOL;
         echo "g: Give up." . PHP_EOL;
@@ -165,14 +173,14 @@ class Casino
 
         echo PHP_EOL;
         echo "Games:" . PHP_EOL;
-        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines. This numbers don't do anything in the logic." .
+        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines. This numbers don't do anything in the logic . " .
             "There are just there to give the user an idea or prompt the AI how many visitors we would have with this" .
-            "machines." . PHP_EOL;
+            "machines . " . PHP_EOL;
 
         echo PHP_EOL;
         echo "Customers" . PHP_EOL;
-        echo "Everyday your casino will be visited by a random amount of customers (50-200). With a random amount of " .
-            "money to play (50 EUR - 10.000 EUR). Each will play a random game until he/she run's out of money or played " .
+        echo "Everyday your casino will be visited by a random amount of customers(50 - 200) . With a random amount of " .
+            "money to play(50 EUR - 10.000 EUR). Each will play a random game until he / she run's out of money or played " .
             "enough (short tests were like 21-30 games)." . PHP_EOL;
 
         echo PHP_EOL;
@@ -224,7 +232,7 @@ class Casino
 
                 $this->totalVisitors++;
 
-                $visitor = new Visitor(rand(1, 1000000) <= 100);
+                $visitor = new Visitor(rand(1, 10000) == 1);
 
                 $gameChoice = rand(1, 100);
 
@@ -257,15 +265,7 @@ class Casino
 
         if ($displayEcho) {
             echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
-            if ($this->budget > $budgetStartOfDay) {
-                echo "Casino won: " . (number_format($this->budget - $budgetStartOfDay)) . " €" . PHP_EOL;
-            } else {
-                echo "Casino lost: " . (number_format($budgetStartOfDay - $this->budget)) . " €" . PHP_EOL;
-            }
-
-            echo PHP_EOL;
-            $this->displaySeparator();
-            echo PHP_EOL;
+            $this->displayRevenue($budgetStartOfDay);
         }
     }
 
@@ -316,6 +316,22 @@ class Casino
     {
         echo "__________________________________________" . PHP_EOL;
     }
+
+    /**
+     * @param float $budgetBefore
+     * @return void
+     */
+    public function displayRevenue(float $budgetBefore): void
+    {
+        if ($this->budget > $budgetBefore) {
+            echo "Casino won: " . (number_format($this->budget - $budgetBefore)) . " €" . PHP_EOL;
+        } else {
+            echo "Casino lost: " . (number_format($budgetBefore - $this->budget)) . " €" . PHP_EOL;
+        }
+        echo PHP_EOL;
+        $this->displaySeparator();
+        echo PHP_EOL;
+    }
 }
 
 class Visitor
@@ -329,8 +345,8 @@ class Visitor
         $this->gamesPlayed = 0;
 
         if ($randomEventOneMillionBudget) {
-            echo "Random Event! You have a visitor with a budget of 1 million! (Chance: 0.01%)\n";
             echo PHP_EOL;
+            echo "Random Event! You have a visitor with a budget of 1 million!(Chance: 0.01 %)\n";
         }
     }
 
