@@ -263,9 +263,10 @@ class Casino
             }
         }
 
-        echo PHP_EOL;
-        $this->displaySeparator();
-        echo PHP_EOL;
+            echo PHP_EOL;
+            $this->displaySeparator();
+            echo PHP_EOL;
+        }
     }
 
     private function updateBudget($value): void
