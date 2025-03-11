@@ -31,13 +31,16 @@ class Casino
         'single_number' => ['chance' => 2.70, 'payout' => 36],
     ];
 
-    const float BLACKJACK_CHANCE_BLACK_JACK_WIN = 4.83;
-    const float BLACKJACK_CHANCE_REGULAR_WIN = 42;
-    const float BLACKJACK_CHANCE_NO_WIN = 100;
-    const float SLOT_CHANCE_BIG_WIN = 0.05;
-    const float SLOT_CHANCE_MEDIUM_WIN = 10;
-    const float SLOT_CHANCE_SMALL_WIN = 35;
-    const float SLOT_CHANCE_NO_WIN = 100;
+    const array BLACKJACK_CHANCES = [
+        'blackjack_win' => 4.83,
+        'regular_win' => 42
+    ];
+
+    const array SLOT_CHANCES = [
+        'big_win' => 0.05,
+        'medium_win' => 10,
+        'small_win' => 35
+    ];
 
     public function __construct($budget = 1000000, $date = 946684800)
     {
@@ -192,10 +195,7 @@ class Casino
                 if ($gameChoice <= 50) {
                     $this->updateBudget(
                         $visitor->playSlots(
-                            self::SLOT_CHANCE_BIG_WIN,
-                            self::SLOT_CHANCE_MEDIUM_WIN,
-                            self::SLOT_CHANCE_SMALL_WIN,
-                            self::SLOT_CHANCE_NO_WIN
+                            self::SLOT_CHANCES
                         ));
                 } elseif ($gameChoice <= 70) {
                     // Roulette
@@ -210,9 +210,7 @@ class Casino
 //                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
                     $this->updateBudget(
                         $visitor->playBlackJack(
-                            self::BLACKJACK_CHANCE_BLACK_JACK_WIN,
-                            self::BLACKJACK_CHANCE_REGULAR_WIN,
-                            self::BLACKJACK_CHANCE_NO_WIN
+                            self::BLACKJACK_CHANCES
                         ));
                 }
 
@@ -322,7 +320,7 @@ class Visitor
         $this->gamesPlayed++;
     }
 
-    public function playSlots($chanceBigWin, $chanceMediumWin, $chanceSmallWin, $chanceNoWin): float
+    public function playSlots($slotChances): float
     {
         $playCount = 0;
         $moneyBeforePlaying = $this->money;
@@ -333,16 +331,16 @@ class Visitor
             $winChance = rand(0, 100);
 
             switch (true) {
-                case ($winChance <= $chanceBigWin):
+                case ($winChance <= $slotChances['big_win']):
                     $this->money += $bet * (rand(50, 1000) / 100);
                     break;
-                case ($winChance <= $chanceMediumWin):
+                case ($winChance <= $slotChances['medium_win']):
                     $this->money += $bet * (rand(5, 20) / 100);
                     break;
-                case ($winChance <= $chanceSmallWin):
+                case ($winChance <= $slotChances['small_win']):
                     $this->money += $bet * (rand(2, 5) / 100);
                     break;
-                case ($winChance <= $chanceNoWin):
+                default:
                     $this->money -= $bet;
                     break;
             }
@@ -371,7 +369,7 @@ class Visitor
             $amountOfBets = rand(1, 9);
 
             // making also the choosen games random
-            $choosenVariants = array_rand($rouletteBets, $amountOfBets);
+            $choosenVariants = (array)array_rand($rouletteBets, $amountOfBets);
 
             foreach ($choosenVariants as $choosenVariant) {
                 $bet = min(rand(5, 100), $this->money);
@@ -400,7 +398,7 @@ class Visitor
         return $moneyBeforePlaying - $this->money;
     }
 
-    public function playBlackJack($chanceBlackJackWin, $chanceRegularWin, $chanceNoWin): float
+    public function playBlackJack($blackJackChances): float
     {
         $playCount = 0;
         $moneyBeforePlaying = $this->money;
@@ -411,13 +409,13 @@ class Visitor
             $winChance = rand(0, 100);
 
             switch (true) {
-                case ($winChance <= $chanceBlackJackWin):
+                case ($winChance <= $blackJackChances['blackjack_win']):
                     $this->money += $bet * 2;
                     break;
-                case ($winChance <= $chanceRegularWin):
+                case ($winChance <= $blackJackChances['regular_win']):
                     $this->money += $bet;
                     break;
-                case ($winChance <= $chanceNoWin):
+                default:
                     $this->money -= $bet;
                     break;
             }
