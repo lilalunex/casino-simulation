@@ -88,9 +88,9 @@ Your input:
 - Visitors per Day: 50 - 200 visitors
 - Budget to play per Visitor: 50 - 10.000 €
 - Visitor chance to play game:
-  - 20% Roulette
-  - 30% Black Jack
   - 50% Slots
+  - 30% Black Jack
+  - 20% Roulette
 - Visitors plays just one type of game
 - Visitors stops playing after ~21-30 times
 
@@ -106,7 +106,16 @@ Only tested on my Windows machine.
 
 ## Ideas / CANDOs:
 
-[ ] Test if 33% per game chances the outcome
+[ ] Chance user plays with counterfeit money -> The casino doesn't recognize at first -> So loses that money -> 
+echo stats & info for that
+
+[ ] You have to purchase a license for gambling, paid annually
+
+[ ] Option to take another credit -> Choice of 3, different capital & interest rates 
+
+[ ] Event: Casino has to close down for a week, for whatever reason
+
+[ ] Chance Dealer doesn't show up for work -> no income for that game for the day
 
 [ ] Statistics for everything
 
@@ -167,3 +176,7 @@ to the """world"""
 ## Future music
 
 Different level of dealers. A more expensive one, can deal more cards, does fewer mistakes i.e. makes you more money.
+
+When doing a renovation, you won't have visitors during this time. Cuz you are renovating (duh...).
+
+Chance dealer quits. No income until you hire a new one.

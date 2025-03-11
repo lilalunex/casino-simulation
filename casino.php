@@ -17,6 +17,10 @@ class Casino
 
     const int SECONDS_IN_A_DAY = 86400;
 
+    const float CHANCE_TO_PLAY_SLOTS = 50;
+    const float CHANCE_TO_PLAY_BLACK_JACK = 80;
+    const float CHANCE_TO_PLAY_ROULETTE = 100;
+
     // Win Chances are from the view of the visitor/player
     const array ROULETTE_BETS = [
         'color' => ['chance' => 48.65, 'payout' => 2],
@@ -147,11 +151,11 @@ class Casino
         echo PHP_EOL;
         echo "1 or enter: Simulate a day. " . PHP_EOL;
         echo "2: Simulate a week. " . PHP_EOL;
-        echo "3: Simulate a month(31 days)." . PHP_EOL;
-        echo "4: Simulate a year(365 days)." . PHP_EOL;
-        echo "5: Simulate until amount of digits change . " . PHP_EOL;
+        echo "3: Simulate a month (31 days)." . PHP_EOL;
+        echo "4: Simulate a year (365 days)." . PHP_EOL;
+        echo "5: Simulate until amount of digits change. " . PHP_EOL;
         echo PHP_EOL;
-        echo "Integer: Simulate for that amount of days . " . PHP_EOL;
+        echo "Integer: Simulate for that amount of days. " . PHP_EOL;
         echo PHP_EOL;
         echo "h: Help, I'm lost." . PHP_EOL;
         echo "g: Give up." . PHP_EOL;
@@ -238,20 +242,20 @@ class Casino
                     $visitor = new Visitor();
                 }
 
-                $gameChoice = rand(1, 100);
+                $gameChoice = rand(100, 10000) / 100;
 
-                if ($gameChoice <= 50) {
+                if ($gameChoice <= self::CHANCE_TO_PLAY_SLOTS) {
                     $this->updateBudget(
                         $visitor->playSlots(
                             self::SLOT_CHANCES
                         ));
-                } elseif ($gameChoice <= 70) {
+                } elseif ($gameChoice <= self::CHANCE_TO_PLAY_ROULETTE) {
                     // Roulette
                     $this->updateBudget(
                         $visitor->playRoulette(
                             self::ROULETTE_BETS
                         ));
-                } else {
+                } elseif ($gameChoice <= self::CHANCE_TO_PLAY_BLACK_JACK) {
                     // Black Jack
                     $this->updateBudget(
                         $visitor->playBlackJack(
@@ -259,7 +263,9 @@ class Casino
                         ));
                 }
 
-//                $totalRevenue += $moneySpendPerVisitor;
+                // If chances not add up to 100, those visitors don't play any games.
+
+                // $totalRevenue += $moneySpendPerVisitor;
             }
 
             $visitorsThisSimulation += $visitors;
