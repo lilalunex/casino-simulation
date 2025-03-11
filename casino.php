@@ -328,17 +328,6 @@ class Visitor
         $this->gamesPlayed = 0;
     }
 
-    public function spendMoney($amount, $winChance): void
-    {
-        $win = (rand(0, 100) <= $winChance * 100);
-        if ($win) {
-            $this->money -= $amount;
-        } else {
-            $this->money += $amount;
-        }
-        $this->gamesPlayed++;
-    }
-
     public function playSlots($slotChances): float
     {
         $playCount = 0;
