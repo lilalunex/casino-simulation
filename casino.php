@@ -20,6 +20,9 @@ class Casino
     // Win Chances are from the view of the visitor/player
     const float ROULETTE_WIN_CHANCE = 0.47;
     const float BLACKJACK_WIN_CHANCE = 0.42;
+    const float BLACKJACK_CHANCE_BLACK_JACK_WIN = 4.83;
+    const float BLACKJACK_CHANCE_REGULAR_WIN = 42;
+    const float BLACKJACK_CHANCE_NO_WIN = 100;
     const float SLOT_CHANCE_BIG_WIN = 0.05;
     const float SLOT_CHANCE_MEDIUM_WIN = 10;
     const float SLOT_CHANCE_SMALL_WIN = 35;
@@ -190,9 +193,15 @@ class Casino
                     $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
                 } else {
                     // Black Jack
-                    $winChance = self::BLACKJACK_WIN_CHANCE;
-                    $visitor->spendMoney($moneySpendPerVisitor, $winChance);
-                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
+//                    $winChance = self::BLACKJACK_WIN_CHANCE;
+//                    $visitor->spendMoney($moneySpendPerVisitor, $winChance);
+//                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
+                    $this->updateBudget(
+                        $visitor->playBlackJack(
+                            self::BLACKJACK_CHANCE_BLACK_JACK_WIN,
+                            self::BLACKJACK_CHANCE_REGULAR_WIN,
+                            self::BLACKJACK_CHANCE_NO_WIN
+                        ));
                 }
 
 //                $totalRevenue += $moneySpendPerVisitor;
@@ -301,9 +310,52 @@ class Visitor
         $this->gamesPlayed++;
     }
 
+    public function playBlackJack($chanceBlackJackWin, $chanceRegularWin, $chanceNoWin): float
+    {
+        $playCount = 0;
+        $moneyBeforePlaying = $this->money;
+
+        echo "plays BJ\n";
+
+        while ($this->money > 0) {
+            $this->gamesPlayed++;
+            $bet = min(rand(5, 100), $this->money);
+            $winChance = rand(0, 100);
+
+            echo "moneybefore: " . $this->money . "\n";
+            echo "bet: " . $bet . "\n";
+
+            switch (true) {
+                case ($winChance <= $chanceBlackJackWin):
+                    echo "wonBJ\n";
+                    $this->money += $bet * 2;
+                    break;
+                case ($winChance <= $chanceRegularWin):
+                    echo "wonRegular\n";
+                    $this->money += $bet;
+                    break;
+                case ($winChance <= $chanceNoWin):
+                    echo "wonNothing\n";
+                    $this->money -= $bet;
+                    break;
+            }
+
+            $playCount++;
+
+            echo "moneyafter: " . $this->money . "\n";
+            echo "\n";
+
+            if ($this->calcuateChanceToStopPlaying($playCount)) {
+                break;
+            }
+        }
+
+        return $moneyBeforePlaying - $this->money;
+    }
+
     public function playSlots($chanceBigWin, $chanceMediumWin, $chanceSmallWin, $chanceNoWin): float
     {
-        $spinCount = 0;
+        $playCount = 0;
         $moneyBeforePlaying = $this->money;
 
         while ($this->money > 0) {
@@ -313,8 +365,7 @@ class Visitor
 
             switch (true) {
                 case ($winChance <= $chanceBigWin):
-                    $winning = $bet * (rand(50, 1000) / 100);
-                    $this->money += $winning;
+                    $this->money += $bet * (rand(50, 1000) / 100);
                     break;
                 case ($winChance <= $chanceMediumWin):
                     $this->money += $bet * (rand(5, 20) / 100);
@@ -327,14 +378,24 @@ class Visitor
                     break;
             }
 
-            $spinCount++;
+            $playCount++;
 
-            // chance that the player doesn't want to play anymore
-            if (100 < (rand(1, 5) * $spinCount)) {
+            if ($this->calcuateChanceToStopPlaying($playCount)) {
                 break;
             }
         }
 
         return $moneyBeforePlaying - $this->money;
+    }
+
+    private function calcuateChanceToStopPlaying($timesPlayedTheSameGame): bool
+    {
+        // chance that the player doesn't want to play anymore
+        // maybe adjustable per game
+        if (100 < (rand(1, 5) * $timesPlayedTheSameGame)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
