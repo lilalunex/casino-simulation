@@ -170,13 +170,31 @@ class Casino
 
         echo PHP_EOL;
         echo "Customers" . PHP_EOL;
-        echo "Everyday your casino will be visited by a random amount of customers, with random amount of money." .
-            "They will play a random amount of games." . PHP_EOL;
+        echo "Everyday your casino will be visited by a random amount of customers (50-200). With a random amount of " .
+            "money to play (50 EUR - 10.000 EUR). Each will play a random game until he/she run's out of money or played " .
+            "enough (short tests were like 21-30 games)." . PHP_EOL;
 
         echo PHP_EOL;
-        echo "Randomness:" . PHP_EOL;
-        echo "The randomness will be in legitimate numbers: You won't have an unrealistic amount of customers per day." .
-            "The math are doing by mathematically correct odds." . PHP_EOL;
+        echo "Game Statistics:" . PHP_EOL;
+        echo "  Roulette Bets:" . PHP_EOL;
+        foreach (self::ROULETTE_BETS as $bet => $info) {
+            echo "    - " . ucfirst(str_replace('_', ' ', $bet)) . ": " .
+                "Chance: " . $info['chance'] . "%, " .
+                "Payout: " . $info['payout'] . "x" . PHP_EOL;
+        }
+        echo PHP_EOL;
+        echo "  Blackjack Chances:" . PHP_EOL;
+        foreach (self::BLACKJACK_CHANCES as $outcome => $chance) {
+            echo "    - " . ucfirst(str_replace('_', ' ', $outcome)) . ": " .
+                "Chance: " . $chance . "%" . PHP_EOL;
+        }
+        echo PHP_EOL;
+        echo "  Slot Machine Wins:" . PHP_EOL;
+        foreach (self::SLOT_CHANCES as $winType => $info) {
+            echo "    - " . ucfirst(str_replace('_', ' ', $winType)) . ": " .
+                "Chance: " . $info['chance'] . "%, " .
+                "Payout: " . $info['payout'] . "x" . PHP_EOL;
+        }
         echo PHP_EOL;
         $this->displaySeparator();
     }
