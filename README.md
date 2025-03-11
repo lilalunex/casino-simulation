@@ -81,6 +81,10 @@ Only tested on my Windows machine.
 
 ## Ideas / CANDOs:
 
+[ ] Calc months & years correct (28 days, 366 days)
+
+[ ] Have closed on day X? And/Or holidays?
+
 [ ] As of now the casino only wins... Hm...
 
 [ ] Test execution on Ubuntu
