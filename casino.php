@@ -185,11 +185,12 @@ class Casino
                     // Roulette
                     $winChance = self::ROULETTE_WIN_CHANCE;
                     $visitor->spendMoney($moneySpendPerVisitor, $winChance);
-                    $this->updateBudget($moneySpendPerVisitor, $winChance);
+                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
                 } else {
                     // Black Jack
                     $winChance = self::BLACKJACK_WIN_CHANCE;
                     $visitor->spendMoney($moneySpendPerVisitor, $winChance);
+                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
                 }
 
 //                $totalRevenue += $moneySpendPerVisitor;
