@@ -106,6 +106,7 @@ class Casino
                     echo PHP_EOL;
                     echo "Invalid input. Please try again." . PHP_EOL;
                     echo "Your input: ";
+                    echo PHP_EOL;
             }
 
             if ($this->budget <= 0) {
@@ -206,7 +207,6 @@ class Casino
         $budgetStartOfDay = $this->budget;
 
         if ($displayEcho) {
-            echo PHP_EOL;
             $this->displaySeparator();
             echo PHP_EOL;
             echo "Running simulation for $days day(s)." . PHP_EOL;
@@ -223,7 +223,8 @@ class Casino
             for ($j = 0; $j < $visitors; $j++) {
 
                 $this->totalVisitors++;
-                $visitor = new Visitor();
+
+                $visitor = new Visitor(rand(1, 1000000) <= 100);
 
                 $gameChoice = rand(1, 100);
 
@@ -261,7 +262,6 @@ class Casino
             } else {
                 echo "Casino lost: " . (number_format($budgetStartOfDay - $this->budget)) . " €" . PHP_EOL;
             }
-        }
 
             echo PHP_EOL;
             $this->displaySeparator();
@@ -323,10 +323,15 @@ class Visitor
     private float $money;
     private int $gamesPlayed;
 
-    public function __construct()
+    public function __construct($randomEventOneMillionBudget = false)
     {
-        $this->money = rand(50, 10000);;
+        $this->money = $randomEventOneMillionBudget ? 1000000 : rand(50, 10000);
         $this->gamesPlayed = 0;
+
+        if ($randomEventOneMillionBudget) {
+            echo "Random Event! You have a visitor with a budget of 1 million! (Chance: 0.01%)\n";
+            echo PHP_EOL;
+        }
     }
 
     public function playSlots($slotChances): float
