@@ -156,19 +156,19 @@ class Casino
 
         echo PHP_EOL;
         echo "Games:" . PHP_EOL;
-        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines. This numbers don't do anything in the logic.".
-        "There are just there to give the user an idea or prompt the AI how many visitors we would have with this".
-        "machines." . PHP_EOL;
+        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines. This numbers don't do anything in the logic." .
+            "There are just there to give the user an idea or prompt the AI how many visitors we would have with this" .
+            "machines." . PHP_EOL;
 
         echo PHP_EOL;
         echo "Customers" . PHP_EOL;
-        echo "Everyday your casino will be visited by a random amount of customers, with random amount of money.".
-        "They will play a random amount of games." . PHP_EOL;
+        echo "Everyday your casino will be visited by a random amount of customers, with random amount of money." .
+            "They will play a random amount of games." . PHP_EOL;
 
         echo PHP_EOL;
         echo "Randomness:" . PHP_EOL;
-        echo "The randomness will be in legitimate numbers: You won't have an unrealistic amount of customers per day.".
-        "The math are doing by mathematically correct odds." . PHP_EOL;
+        echo "The randomness will be in legitimate numbers: You won't have an unrealistic amount of customers per day." .
+            "The math are doing by mathematically correct odds." . PHP_EOL;
         echo PHP_EOL;
         $this->displaySeparator();
     }
@@ -207,6 +207,7 @@ class Casino
                         ));
                 } elseif ($gameChoice <= 70) {
                     // Roulette
+                    // Closing slots if we lose more than 200000 EUR (tesing, playing around)
                     $this->updateBudget(
                         $visitor->playRoulette(
                             self::ROULETTE_BETS
@@ -336,7 +337,7 @@ class Visitor
         while ($this->money > 0) {
             $this->gamesPlayed++;
             $bet = min(rand(5, 100), $this->money);
-            $winChance = rand(0, 100);
+            $winChance = rand(0, 10000);
 
             switch (true) {
                 case ($winChance <= $slotChances['jackpot_win']['chance']):
@@ -371,9 +372,6 @@ class Visitor
             }
         }
 
-        echo "player started with: $moneyBeforePlaying" . PHP_EOL;
-        echo "plaer leaves with: $this->money" . PHP_EOL;
-        echo "\n";
         return $moneyBeforePlaying - $this->money;
     }
 
