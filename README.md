@@ -131,6 +131,11 @@ accordingly to amount of owned machines -> turning this into an incremental game
 [ ] Idea: Storyline -> User has to take loan first, so he/she understands there is one and gives immersion
 to the """world"""
 
+[ ] When doing actual game gamePlay loop: Simulate until action of user is required or random event happened. + Option 
+to not hold on event + input to stop simulation
+
+[ ] Don't redo the entire output always. Update onscreen vars.
+
 [ ] Add expanses: employees, rent, lights, water, food, misc
 
 [ ] Event: Repair/buy machines / furniture again
