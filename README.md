@@ -101,7 +101,7 @@ Only tested on my Windows machine.
 
 [ ] Make all options chooseable in the CLI
 
-[ ] Write possibilities in help
+[X] Write possibilities in help
 
 [ ] Random Event: A visitor comes and plays with 1.000.000 EUR
 
