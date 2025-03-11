@@ -110,3 +110,12 @@ Only tested on my Windows machine.
 [ ] Improve code
 
 [ ] Write Tests
+
+[ ] As of now not considering the fact, that a winning player is getting in a winners-high, continues on playing and
+looses the winnings again
+
+[ ] detailed statistics for played games
+
+[ ] check for game over when budget is updated?
+
+[ ] Test: Modify loss numbers to test output of giveup
