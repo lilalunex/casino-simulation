@@ -16,7 +16,7 @@ php casino.php
 ## Showcase
 
 ```
-user@machine:~/code/casino-simulation$ php casino.php 
+user@machine:~/code/casino-simulation$ php casino.php
 
 Casino Simulation.
 
@@ -29,6 +29,9 @@ Choose what to do next
 2: Simulate a week.
 3: Simulate a month (31 days).
 4: Simulate a year (365 days).
+5: Simulate until amount of digits change.
+
+Integer: Simulate for that amount of days.
 
 h: Help, I'm lost.
 g: Give up.
@@ -40,13 +43,13 @@ __________________________________________
 
 Running simulation for 1 day(s).
 
-Total visitors: 66
-You won: 201,326 €
+Total visitors: 126
+Casino won: 79,843 €
 
 __________________________________________
 
 Date:   02nd 01 2000
-Budget: 1,201,326.00 €
+Budget: 1,079,842.50 €
 
 Choose what to do next
 
@@ -54,12 +57,15 @@ Choose what to do next
 2: Simulate a week.
 3: Simulate a month (31 days).
 4: Simulate a year (365 days).
+5: Simulate until amount of digits change.
+
+Integer: Simulate for that amount of days.
 
 h: Help, I'm lost.
 g: Give up.
 e: Exit.
 
-Your input: 
+Your input:
 
 ```
 
