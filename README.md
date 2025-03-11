@@ -71,6 +71,31 @@ Your input:
 
 ---
 
+## Features
+
+- You can simulate days in your casino
+- Visitors come to your Casino to play games
+- Your casino has the games: Roulette, Black Jack & Slots
+- There are calculations happening for every type of game
+- Visitor stop playing after ~21-30 rounds per game
+- Every visitor just plays one type of game
+- Random Events
+
+---
+
+## Numbers used for simulation
+
+- Visitors per Day: 50 - 200 visitors
+- Budget to play per Visitor: 50 - 10.000 €
+- Visitor chance to play game:
+  - 20% Roulette
+  - 30% Black Jack
+  - 50% Slots
+- Visitors plays just one type of game
+- Visitors stops playing after ~21-30 times
+
+---
+
 ## Maybe useful Information
 
 Programmed on Windows WSL (Maybe important fo know if this doesn't work on your machine at first).
@@ -80,6 +105,10 @@ Only tested on my Windows machine.
 ---
 
 ## Ideas / CANDOs:
+
+[ ] Test if 33% per game chances the outcome
+
+[ ] Statistics for everything
 
 [ ] Idea: Marketing campaign
 
@@ -109,8 +138,6 @@ to the """world"""
 
 [ ] User can add own timezone, budget & days to skip
 
-[X] Change Repo name to include simulation
-
 [ ] Save & resume option
 
 [ ] Able to play yourself (splitting up in multiple files)
@@ -121,23 +148,11 @@ to the """world"""
 
 [ ] Make all options chooseable in the CLI
 
-[X] Write possibilities in help
-
-[X] Random Event: A visitor comes and plays with 1.000.000 EUR
-
-[X] User can type in how many days to simulate
-
-[X] Simulate until (maybe) a new digit is appended.
-
-[X] Print stats of each day
-
 [ ] On Game Over show the stats of the day
 
 [ ] Improve code
 
 [ ] Write Tests
-
-[X] Player will stop playing after some games and not until he/her runs out of money
 
 [ ] detailed statistics for played games
 
@@ -146,3 +161,9 @@ to the """world"""
 [ ] Test: Modify loss numbers to test output of giveup
 
 [ ] Konami Cheat for moneys
+
+---
+
+## Future music
+
+Different level of dealers. A more expensive one, can deal more cards, does fewer mistakes i.e. makes you more money.
