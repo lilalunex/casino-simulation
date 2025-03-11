@@ -18,8 +18,19 @@ class Casino
     const int SECONDS_IN_A_DAY = 86400;
 
     // Win Chances are from the view of the visitor/player
-    const float ROULETTE_WIN_CHANCE = 0.47;
-    const float BLACKJACK_WIN_CHANCE = 0.42;
+    const array ROULETTE_BETS = [
+        'color' => ['chance' => 48.65, 'payout' => 2],
+        'odd_even' => ['chance' => 48.65, 'payout' => 2],
+        '18_numbers' => ['chance' => 48.65, 'payout' => 2],
+        'column' => ['chance' => 32.43, 'payout' => 3],
+        'dozen' => ['chance' => 32.43, 'payout' => 3],
+        'six_number' => ['chance' => 16.22, 'payout' => 6],
+        'four_number' => ['chance' => 10.81, 'payout' => 9],
+        'three_number' => ['chance' => 8.11, 'payout' => 12],
+        'two_number' => ['chance' => 5.41, 'payout' => 18],
+        'single_number' => ['chance' => 2.70, 'payout' => 36],
+    ];
+
     const float BLACKJACK_CHANCE_BLACK_JACK_WIN = 4.83;
     const float BLACKJACK_CHANCE_REGULAR_WIN = 42;
     const float BLACKJACK_CHANCE_NO_WIN = 100;
@@ -188,9 +199,10 @@ class Casino
                         ));
                 } elseif ($gameChoice <= 70) {
                     // Roulette
-                    $winChance = self::ROULETTE_WIN_CHANCE;
-                    $visitor->spendMoney($moneySpendPerVisitor, $winChance);
-                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
+                    $this->updateBudget(
+                        $visitor->playRoulette(
+                            self::ROULETTE_BETS
+                        ));
                 } else {
                     // Black Jack
 //                    $winChance = self::BLACKJACK_WIN_CHANCE;
@@ -310,38 +322,6 @@ class Visitor
         $this->gamesPlayed++;
     }
 
-    public function playBlackJack($chanceBlackJackWin, $chanceRegularWin, $chanceNoWin): float
-    {
-        $playCount = 0;
-        $moneyBeforePlaying = $this->money;
-
-        while ($this->money > 0) {
-            $this->gamesPlayed++;
-            $bet = min(rand(5, 100), $this->money);
-            $winChance = rand(0, 100);
-
-            switch (true) {
-                case ($winChance <= $chanceBlackJackWin):
-                    $this->money += $bet * 2;
-                    break;
-                case ($winChance <= $chanceRegularWin):
-                    $this->money += $bet;
-                    break;
-                case ($winChance <= $chanceNoWin):
-                    $this->money -= $bet;
-                    break;
-            }
-
-            $playCount++;
-
-            if ($this->calcuateChanceToStopPlaying($playCount)) {
-                break;
-            }
-        }
-
-        return $moneyBeforePlaying - $this->money;
-    }
-
     public function playSlots($chanceBigWin, $chanceMediumWin, $chanceSmallWin, $chanceNoWin): float
     {
         $playCount = 0;
@@ -361,6 +341,81 @@ class Visitor
                     break;
                 case ($winChance <= $chanceSmallWin):
                     $this->money += $bet * (rand(2, 5) / 100);
+                    break;
+                case ($winChance <= $chanceNoWin):
+                    $this->money -= $bet;
+                    break;
+            }
+
+            $playCount++;
+
+            if ($this->calcuateChanceToStopPlaying($playCount)) {
+                break;
+            }
+        }
+
+        return $moneyBeforePlaying - $this->money;
+    }
+
+    public function playRoulette(
+        $rouletteBets
+    ): float
+    {
+        $playCount = 0;
+        $moneyBeforePlaying = $this->money;
+
+        while ($this->money > 0) {
+            $this->gamesPlayed++;
+
+            // simulating the player choose between 1-9 bets per round
+            $amountOfBets = rand(1, 9);
+
+            // making also the choosen games random
+            $choosenVariants = array_rand($rouletteBets, $amountOfBets);
+
+            foreach ($choosenVariants as $choosenVariant) {
+                $bet = min(rand(5, 100), $this->money);
+                $winChance = rand(0, 100);
+
+                $chance = $rouletteBets[$choosenVariant]['chance'];
+                $payout = $rouletteBets[$choosenVariant]['payout'];
+
+                switch (true) {
+                    case ($winChance <= $chance):
+                        $this->money += ($bet * $payout) - $bet;
+                        break;
+                    default:
+                        $this->money -= $bet;
+                        break;
+                }
+            }
+
+            $playCount++;
+
+            if ($this->calcuateChanceToStopPlaying($playCount)) {
+                break;
+            }
+        }
+
+        return $moneyBeforePlaying - $this->money;
+    }
+
+    public function playBlackJack($chanceBlackJackWin, $chanceRegularWin, $chanceNoWin): float
+    {
+        $playCount = 0;
+        $moneyBeforePlaying = $this->money;
+
+        while ($this->money > 0) {
+            $this->gamesPlayed++;
+            $bet = min(rand(5, 100), $this->money);
+            $winChance = rand(0, 100);
+
+            switch (true) {
+                case ($winChance <= $chanceBlackJackWin):
+                    $this->money += $bet * 2;
+                    break;
+                case ($winChance <= $chanceRegularWin):
+                    $this->money += $bet;
                     break;
                 case ($winChance <= $chanceNoWin):
                     $this->money -= $bet;
