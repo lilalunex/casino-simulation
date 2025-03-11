@@ -82,11 +82,14 @@ class Casino
                 case '4':
                     $this->simulate(365);
                     break;
-//                case '5':
-//                    $this->simulate();
-//                    break;
+                case '5':
+                    $lengthBefore = strlen((string)abs(floor($this->budget)));
+                    while ($lengthBefore == strlen((string)abs(floor($this->budget)))) {
+                        $this->simulate(1, false);
+                    }
+                    break;
                 case ctype_digit($input):
-                    $this->simulate((int) $input);
+                    $this->simulate((int)$input);
                     break;
                 case 'h':
                     $this->displayHelp();
@@ -137,7 +140,7 @@ class Casino
         echo "2: Simulate a week." . PHP_EOL;
         echo "3: Simulate a month (31 days)." . PHP_EOL;
         echo "4: Simulate a year (365 days)." . PHP_EOL;
-//        echo "5: Simulate until (maybe) a new digit is appended." . PHP_EOL;
+        echo "5: Simulate until amount of digits change." . PHP_EOL;
         echo PHP_EOL;
         echo "Integer: Simulate for that amount of days." . PHP_EOL;
         echo PHP_EOL;
@@ -178,17 +181,19 @@ class Casino
         $this->displaySeparator();
     }
 
-    private function simulate($days): void
+    private function simulate($days, $displayEcho = true): void
     {
         $visitorsThisSimulation = 0;
         $totalRevenue = 0;
         $budgetStartOfDay = $this->budget;
 
-        echo PHP_EOL;
-        $this->displaySeparator();
-        echo PHP_EOL;
-        echo "Running simulation for $days day(s)." . PHP_EOL;
-        echo PHP_EOL;
+        if ($displayEcho) {
+            echo PHP_EOL;
+            $this->displaySeparator();
+            echo PHP_EOL;
+            echo "Running simulation for $days day(s)." . PHP_EOL;
+            echo PHP_EOL;
+        }
 
         // for days
         for ($i = 0; $i < $days; $i++) {
@@ -231,11 +236,13 @@ class Casino
 
         $this->updateDate($days);
 
-        echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
-        if ($this->budget > $budgetStartOfDay) {
-            echo "Casino won: " . (number_format($this->budget - $budgetStartOfDay)) . " €" . PHP_EOL;
-        } else {
-            echo "Casino lost: " . (number_format($budgetStartOfDay - $this->budget)) . " €" . PHP_EOL;
+        if ($displayEcho) {
+            echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
+            if ($this->budget > $budgetStartOfDay) {
+                echo "Casino won: " . (number_format($this->budget - $budgetStartOfDay)) . " €" . PHP_EOL;
+            } else {
+                echo "Casino lost: " . (number_format($budgetStartOfDay - $this->budget)) . " €" . PHP_EOL;
+            }
         }
 
         echo PHP_EOL;

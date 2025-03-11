@@ -75,7 +75,7 @@ Only tested on my Windows machine.
 
 ## Ideas / CANDOs:
 
-[ ] Make odds harder for Casino (Looks like you can only win right now). Look up statistics for game win chances.
+[ ] As of now the casino only wins... Hm...
 
 [ ] Test execution on Ubuntu
 
@@ -83,7 +83,7 @@ Only tested on my Windows machine.
 
 [ ] User can add own timezone, budget & days to skip
 
-[ ] Change Repo name to include simulation
+[X] Change Repo name to include simulation
 
 [ ] Save & resume option
 
@@ -99,11 +99,11 @@ Only tested on my Windows machine.
 
 [ ] Random Event: A visitor comes and plays with 1.000.000 EUR
 
-[ ] User can type in how many days to simulate
+[X] User can type in how many days to simulate
 
-[ ] Simulate until (maybe) a new digit is appended.
+[X] Simulate until (maybe) a new digit is appended.
 
-[ ] Print stats of each day
+[X] Print stats of each day
 
 [ ] On Game Over show the stats of the day
 
@@ -111,8 +111,7 @@ Only tested on my Windows machine.
 
 [ ] Write Tests
 
-[ ] As of now not considering the fact, that a winning player is getting in a winners-high, continues on playing and
-looses the winnings again
+[X] Player will stop playing after some games and not until he/her runs out of money
 
 [ ] detailed statistics for played games
 
