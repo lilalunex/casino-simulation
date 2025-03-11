@@ -81,6 +81,18 @@ Only tested on my Windows machine.
 
 ## Ideas / CANDOs:
 
+[ ] Idea: Marketing campaign
+
+[ ] Idea: Open up new branches
+
+[ ] Idea: New machines have to be purchased. Players starts with few machines. Caluculations have to take done
+accordingly to amount of owned machines -> turning this into an incremental game.
+
+[ ] Idea: Start with a loan you have to pay back
+
+[ ] Idea: Storyline -> User has to take loan first, so he/she understands there is one and gives immersion
+to the """world"""
+
 [ ] Add expanses: employees, rent, lights, water, food, misc
 
 [ ] Event: Repair/buy machines / furniture again
