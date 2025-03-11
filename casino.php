@@ -393,7 +393,7 @@ class Visitor
 
             foreach ($choosenVariants as $choosenVariant) {
                 $bet = min(rand(5, 100), $this->money);
-                $winChance = rand(0, 100);
+                $winChance = rand(0, 10000) / 100;
 
                 $chance = $rouletteBets[$choosenVariant]['chance'];
                 $payout = $rouletteBets[$choosenVariant]['payout'];
@@ -426,7 +426,7 @@ class Visitor
         while ($this->money > 0) {
             $this->gamesPlayed++;
             $bet = min(rand(5, 100), $this->money);
-            $winChance = rand(0, 100);
+            $winChance = rand(0, 10000) / 100;
 
             switch (true) {
                 case ($winChance <= $blackJackChances['blackjack_win']):
