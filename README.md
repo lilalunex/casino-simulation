@@ -107,7 +107,7 @@ Only tested on my Windows machine.
 
 [X] Write possibilities in help
 
-[ ] Random Event: A visitor comes and plays with 1.000.000 EUR
+[X] Random Event: A visitor comes and plays with 1.000.000 EUR
 
 [X] User can type in how many days to simulate
 
