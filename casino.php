@@ -195,7 +195,6 @@ class Casino
             for ($j = 0; $j < $visitors; $j++) {
 
                 $this->totalVisitors++;
-                $moneySpendPerVisitor = rand(50, 10000);
                 $visitor = new Visitor();
 
                 $gameChoice = rand(1, 100);
@@ -207,16 +206,12 @@ class Casino
                         ));
                 } elseif ($gameChoice <= 70) {
                     // Roulette
-                    // Closing slots if we lose more than 200000 EUR (tesing, playing around)
                     $this->updateBudget(
                         $visitor->playRoulette(
                             self::ROULETTE_BETS
                         ));
                 } else {
                     // Black Jack
-//                    $winChance = self::BLACKJACK_WIN_CHANCE;
-//                    $visitor->spendMoney($moneySpendPerVisitor, $winChance);
-//                    $this->updateBudgetOld($moneySpendPerVisitor, $winChance);
                     $this->updateBudget(
                         $visitor->playBlackJack(
                             self::BLACKJACK_CHANCES
@@ -227,8 +222,9 @@ class Casino
             }
 
             $visitorsThisSimulation += $visitors;
-            $this->updateDate($days);
         }
+
+        $this->updateDate($days);
 
         echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
         if ($this->budget > $budgetStartOfDay) {
@@ -268,10 +264,10 @@ class Casino
      *
      * @param int $days The amount of days simulating.
      */
-    private function updateDate($days): void
+    private function updateDate(int $days): void
     {
         $this->totalDays += $days;
-        $this->date = $this->date + ($days * self::SECONDS_IN_A_DAY);
+        $this->date += $days * self::SECONDS_IN_A_DAY;
     }
 
     private function giveUp(): void // Loser...
