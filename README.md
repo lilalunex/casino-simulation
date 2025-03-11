@@ -124,3 +124,5 @@ Only tested on my Windows machine.
 [ ] check for game over when budget is updated?
 
 [ ] Test: Modify loss numbers to test output of giveup
+
+[ ] Konami Cheat for moneys
