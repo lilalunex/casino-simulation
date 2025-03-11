@@ -1,27 +1,29 @@
 #!/usr/bin/php
 <?php declare(strict_types=1);
 
+use JetBrains\PhpStorm\NoReturn;
+
 $casino = new Casino();
 $casino->displayIntro();
 $casino->gameLoop();
 
 class Casino
 {
-    private $budget;
-    private $date;
-    private $displayInstructions = true;
-    private $totalDays = 0;
-    private $totalVisitors = 0;
+    private float $budget;
+    private int $date;
+    private bool $displayInstructions = true;
+    private int $totalDays = 0;
+    private int $totalVisitors = 0;
 
-    const SECONDS_IN_A_DAY = 86400;
+    const int SECONDS_IN_A_DAY = 86400;
 
     // Win Chances are from the view of the visitor/player
-    const ROULETTE_WIN_CHANCE = 0.47;
-    const BLACKJACK_WIN_CHANCE = 0.42;
-    const SLOT_CHANCE_BIG_WIN = 0.05;
-    const SLOT_CHANCE_MEDIUM_WIN = 10;
-    const SLOT_CHANCE_SMALL_WIN = 35;
-    const SLOT_CHANCE_NO_WIN = 100;
+    const float ROULETTE_WIN_CHANCE = 0.47;
+    const float BLACKJACK_WIN_CHANCE = 0.42;
+    const float SLOT_CHANCE_BIG_WIN = 0.05;
+    const float SLOT_CHANCE_MEDIUM_WIN = 10;
+    const float SLOT_CHANCE_SMALL_WIN = 35;
+    const float SLOT_CHANCE_NO_WIN = 100;
 
     public function __construct($budget = 1000000, $date = 946684800)
     {
@@ -31,7 +33,7 @@ class Casino
         $this->date = $date;
     }
 
-    public function gameLoop()
+    public function gameLoop(): void
     {
         while ($this->budget > 0) {
 
@@ -85,24 +87,24 @@ class Casino
         }
     }
 
-    private function displayDate()
+    private function displayDate(): void
     {
         echo "Date:   " . date("dS m Y", $this->date) . PHP_EOL;
     }
 
-    private function displayBudget()
+    private function displayBudget(): void
     {
         echo "Budget: " . number_format($this->budget, 2) . " €" . PHP_EOL;
     }
 
-    public function displayIntro()
+    public function displayIntro(): void
     {
         echo PHP_EOL;
         echo "Casino Simulation." . PHP_EOL;
         echo PHP_EOL;
     }
 
-    private function displayInstructions()
+    private function displayInstructions(): void
     {
         echo PHP_EOL;
         echo "Choose what to do next" . PHP_EOL;
@@ -120,7 +122,7 @@ class Casino
         echo "Your input: ";
     }
 
-    private function displayHelp()
+    private function displayHelp(): void
     {
         echo PHP_EOL;
         $this->displaySeparator();
@@ -146,7 +148,7 @@ class Casino
         $this->displaySeparator();
     }
 
-    private function simulate($days)
+    private function simulate($days): void
     {
         $visitorsThisSimulation = 0;
         $totalRevenue = 0;
@@ -218,7 +220,7 @@ class Casino
      * @param float $moneySpent The amount spent by the player.
      * @param float $winChance The probability of the player winning.
      */
-    private function updateBudgetOld($moneySpent, $winChance)
+    private function updateBudgetOld($moneySpent, $winChance): void
     {
         $visitorWin = (rand(0, 100) <= $winChance * 100);
         if ($visitorWin) {
@@ -238,13 +240,13 @@ class Casino
      *
      * @param int $days The amount of days simulating.
      */
-    private function updateDate($days)
+    private function updateDate($days): void
     {
         $this->totalDays += $days;
         $this->date = $this->date + ($days * self::SECONDS_IN_A_DAY);
     }
 
-    private function giveUp() // Loser...
+    private function giveUp(): void // Loser...
     {
         echo "Loser..." . PHP_EOL;
         echo PHP_EOL;
@@ -252,7 +254,7 @@ class Casino
     }
 
 //    private function gameOver($totalRevenue, $i)
-    private function gameOver()
+    #[NoReturn] private function gameOver(): void
     {
 //        $this->totalDays += $i;
 
@@ -271,7 +273,7 @@ class Casino
         exit;
     }
 
-    private function displaySeparator()
+    private function displaySeparator(): void
     {
         echo "__________________________________________" . PHP_EOL;
     }
