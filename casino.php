@@ -238,22 +238,6 @@ class Casino
         echo PHP_EOL;
     }
 
-    /**
-     * Update the budget based on the outcome of a bet.
-     *
-     * @param float $moneySpent The amount spent by the player.
-     * @param float $winChance The probability of the player winning.
-     */
-    private function updateBudgetOld($moneySpent, $winChance): void
-    {
-        $visitorWin = (rand(0, 100) <= $winChance * 100);
-        if ($visitorWin) {
-            $this->budget = $this->budget - $moneySpent;
-        } else {
-            $this->budget = $this->budget + $moneySpent;
-        }
-    }
-
     private function updateBudget($value): void
     {
         $this->budget += $value;
@@ -277,20 +261,20 @@ class Casino
         $this->budget = 0;
     }
 
-//    private function gameOver($totalRevenue, $i)
+    //    private function gameOver($totalRevenue, $i)
     #[NoReturn] private function gameOver(): void
     {
-//        $this->totalDays += $i;
+        //        $this->totalDays += $i;
 
-//        echo "Lost after simulating: $i day(s)" . PHP_EOL;
+        //        echo "Lost after simulating: $i day(s)" . PHP_EOL;
         echo "Lost on Date: " . date("dS m Y", $this->date) . PHP_EOL;
         echo "Lost after days: " . $this->totalDays . PHP_EOL;
         echo "Total visitors: " . $this->totalVisitors . PHP_EOL;
-//        if ($this->budget > $totalRevenue) {
-//            echo "Casino won: " . (number_format($this->budget - $totalRevenue)) . " €" . PHP_EOL;
-//        } else {
-//            echo "Casino lost: " . (number_format($totalRevenue - $this->budget)) . " €" . PHP_EOL;
-//        }
+        //        if ($this->budget > $totalRevenue) {
+        //            echo "Casino won: " . (number_format($this->budget - $totalRevenue)) . " €" . PHP_EOL;
+        //        } else {
+        //            echo "Casino lost: " . (number_format($totalRevenue - $this->budget)) . " €" . PHP_EOL;
+        //        }
         echo PHP_EOL;
         echo "Game Over. You're out of money!" . PHP_EOL;
         echo PHP_EOL;
