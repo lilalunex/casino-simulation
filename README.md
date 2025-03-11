@@ -185,3 +185,5 @@ Different level of dealers. A more expensive one, can deal more cards, does fewe
 When doing a renovation, you won't have visitors during this time. Cuz you are renovating (duh...).
 
 Chance dealer quits. No income until you hire a new one.
+
+Actual game gameplay loop like you have an open button, see each visitor coming on, what's he/she's doing...
