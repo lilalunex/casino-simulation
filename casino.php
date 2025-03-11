@@ -28,7 +28,7 @@ class Casino
         'four_number' => ['chance' => 10.81, 'payout' => 9],
         'three_number' => ['chance' => 8.11, 'payout' => 12],
         'two_number' => ['chance' => 5.41, 'payout' => 18],
-        'single_number' => ['chance' => 2.70, 'payout' => 36],
+        'single_number' => ['chance' => 2.70, 'payout' => 36]
     ];
 
     const array BLACKJACK_CHANCES = [
@@ -37,9 +37,13 @@ class Casino
     ];
 
     const array SLOT_CHANCES = [
-        'big_win' => 0.05,
-        'medium_win' => 10,
-        'small_win' => 35
+        'jackpot_win' => ['chance' => 0.01, 'payout' => 1000],
+        'mega_win' => ['chance' => 0.1, 'payout' => 100],
+        'big_win' => ['chance' => 0.5, 'payout' => 50],
+        'medium_win' => ['chance' => 5, 'payout' => 10],
+        'small_win' => ['chance' => 20, 'payout' => 5],
+        'money_back' => ['chance' => 15, 'payout' => 1],
+        'near_miss' => ['chance' => 20, 'payout' => 0.5]
     ];
 
     public function __construct($budget = 1000000, $date = 946684800)
@@ -152,15 +156,19 @@ class Casino
 
         echo PHP_EOL;
         echo "Games:" . PHP_EOL;
-        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines." . PHP_EOL;
+        echo "1 Roulette table, 2 Black Jack tables & 9 Slot machines. This numbers don't do anything in the logic.".
+        "There are just there to give the user an idea or prompt the AI how many visitors we would have with this".
+        "machines." . PHP_EOL;
 
         echo PHP_EOL;
         echo "Customers" . PHP_EOL;
-        echo "Everyday your casino will be visited by a random amount of customers, with random amount of money. They will play a random amount of games." . PHP_EOL;
+        echo "Everyday your casino will be visited by a random amount of customers, with random amount of money.".
+        "They will play a random amount of games." . PHP_EOL;
 
         echo PHP_EOL;
         echo "Randomness:" . PHP_EOL;
-        echo "The randomness will be in legitimate numbers: You won't have an unrealistic amount of customers per day. The math are doing by mathematically correct odds." . PHP_EOL;
+        echo "The randomness will be in legitimate numbers: You won't have an unrealistic amount of customers per day.".
+        "The math are doing by mathematically correct odds." . PHP_EOL;
         echo PHP_EOL;
         $this->displaySeparator();
     }
@@ -331,14 +339,25 @@ class Visitor
             $winChance = rand(0, 100);
 
             switch (true) {
-                case ($winChance <= $slotChances['big_win']):
-                    $this->money += $bet * (rand(50, 1000) / 100);
+                case ($winChance <= $slotChances['jackpot_win']['chance']):
+                    $this->money += ($bet * $slotChances['jackpot_win']['payout']) - $bet;
                     break;
-                case ($winChance <= $slotChances['medium_win']):
-                    $this->money += $bet * (rand(5, 20) / 100);
+                case ($winChance <= $slotChances['mega_win']['chance']):
+                    $this->money += ($bet * $slotChances['mega_win']['payout']) - $bet;
                     break;
-                case ($winChance <= $slotChances['small_win']):
-                    $this->money += $bet * (rand(2, 5) / 100);
+                case ($winChance <= $slotChances['big_win']['chance']):
+                    $this->money += ($bet * $slotChances['big_win']['payout']) - $bet;
+                    break;
+                case ($winChance <= $slotChances['medium_win']['chance']):
+                    $this->money += ($bet * $slotChances['medium_win']['payout']) - $bet;
+                    break;
+                case ($winChance <= $slotChances['small_win']['chance']):
+                    $this->money += ($bet * $slotChances['small_win']['payout']) - $bet;
+                    break;
+                case ($winChance <= $slotChances['money_back']['chance']):
+                    break;
+                case ($winChance <= $slotChances['near_miss']['chance']):
+                    $this->money += ($bet * $slotChances['near_miss']['payout']) - $bet;
                     break;
                 default:
                     $this->money -= $bet;
@@ -352,6 +371,9 @@ class Visitor
             }
         }
 
+        echo "player started with: $moneyBeforePlaying" . PHP_EOL;
+        echo "plaer leaves with: $this->money" . PHP_EOL;
+        echo "\n";
         return $moneyBeforePlaying - $this->money;
     }
 
@@ -410,7 +432,7 @@ class Visitor
 
             switch (true) {
                 case ($winChance <= $blackJackChances['blackjack_win']):
-                    $this->money += $bet * 2;
+                    $this->money += $bet * 1.5;
                     break;
                 case ($winChance <= $blackJackChances['regular_win']):
                     $this->money += $bet;
