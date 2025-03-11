@@ -232,7 +232,11 @@ class Casino
 
                 $this->totalVisitors++;
 
-                $visitor = new Visitor(rand(1, 10000) == 1);
+                if (rand(1, 1000000) <= 100) {
+                    $visitor = new Visitor(true);
+                } else {
+                    $visitor = new Visitor();
+                }
 
                 $gameChoice = rand(1, 100);
 
