@@ -364,9 +364,6 @@ class Visitor
         $randomEventIsMillionaire = mt_rand(1, 10000);
         $randomEventHasCounterfeitMoney = mt_rand(1, 100);
 
-//        echo "randomEventIsMillionaire: $randomEventIsMillionaire" . PHP_EOL;
-//        echo "randomEventHasCounterfeitmoney: $randomEventHasCounterfeitMoney" . PHP_EOL;
-
         $this->money = mt_rand(50, 10000);
         $this->gamesPlayed = 0;
 
@@ -379,6 +376,7 @@ class Visitor
         }
 
         if ($this->isMillionaire && $this->moneyIsCounterfeit) {
+            echo PHP_EOL;
             echo "Ultra Rare Event: A customer with a million budget hat counterfeit money D: D: D:!\n";
             echo PHP_EOL;
         } elseif ($this->isMillionaire) {
@@ -400,31 +398,16 @@ class Visitor
             $bet = min(rand(5, 100), $this->money);
             $winChance = rand(0, 10000);
 
-            switch (true) {
-                case ($winChance <= $slotChances['jackpot_win']['chance']):
-                    $this->money += ($bet * $slotChances['jackpot_win']['payout']) - $bet;
-                    break;
-                case ($winChance <= $slotChances['mega_win']['chance']):
-                    $this->money += ($bet * $slotChances['mega_win']['payout']) - $bet;
-                    break;
-                case ($winChance <= $slotChances['big_win']['chance']):
-                    $this->money += ($bet * $slotChances['big_win']['payout']) - $bet;
-                    break;
-                case ($winChance <= $slotChances['medium_win']['chance']):
-                    $this->money += ($bet * $slotChances['medium_win']['payout']) - $bet;
-                    break;
-                case ($winChance <= $slotChances['small_win']['chance']):
-                    $this->money += ($bet * $slotChances['small_win']['payout']) - $bet;
-                    break;
-                case ($winChance <= $slotChances['money_back']['chance']):
-                    break;
-                case ($winChance <= $slotChances['near_miss']['chance']):
-                    $this->money += ($bet * $slotChances['near_miss']['payout']) - $bet;
-                    break;
-                default:
-                    $this->money -= $bet;
-                    break;
-            }
+            $this->money += match (true) {
+                $winChance <= $slotChances['jackpot_win']['chance'] => ($bet * $slotChances['jackpot_win']['payout']) - $bet,
+                $winChance <= $slotChances['mega_win']['chance'] => ($bet * $slotChances['mega_win']['payout']) - $bet,
+                $winChance <= $slotChances['big_win']['chance'] => ($bet * $slotChances['big_win']['payout']) - $bet,
+                $winChance <= $slotChances['medium_win']['chance'] => ($bet * $slotChances['medium_win']['payout']) - $bet,
+                $winChance <= $slotChances['small_win']['chance'] => ($bet * $slotChances['small_win']['payout']) - $bet,
+                $winChance <= $slotChances['money_back']['chance'] => 0, // No change
+                $winChance <= $slotChances['near_miss']['chance'] => ($bet * $slotChances['near_miss']['payout']) - $bet,
+                default => -$bet,
+            };
 
             $playCount++;
 
@@ -459,14 +442,11 @@ class Visitor
                 $chance = $rouletteBets[$choosenVariant]['chance'];
                 $payout = $rouletteBets[$choosenVariant]['payout'];
 
-                switch (true) {
-                    case ($winChance <= $chance):
-                        $this->money += ($bet * $payout) - $bet;
-                        break;
-                    default:
-                        $this->money -= $bet;
-                        break;
-                }
+                $this->money += match (true) {
+                    $winChance <= $chance => ($bet * $payout) - $bet,
+                    default => -$bet,
+                };
+
             }
 
             $playCount++;
@@ -489,17 +469,11 @@ class Visitor
             $bet = min(rand(5, 100), $this->money);
             $winChance = rand(0, 10000) / 100;
 
-            switch (true) {
-                case ($winChance <= $blackJackChances['blackjack_win']):
-                    $this->money += $bet * 1.5;
-                    break;
-                case ($winChance <= $blackJackChances['regular_win']):
-                    $this->money += $bet;
-                    break;
-                default:
-                    $this->money -= $bet;
-                    break;
-            }
+            $this->money += match (true) {
+                $winChance <= $blackJackChances['blackjack_win'] => $bet * 1.5,
+                $winChance <= $blackJackChances['regular_win'] => $bet,
+                default => -$bet,
+            };
 
             $playCount++;
 
