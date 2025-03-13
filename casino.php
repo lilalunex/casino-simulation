@@ -235,13 +235,7 @@ class Casino
             for ($j = 0; $j < $visitors; $j++) {
 
                 $this->totalVisitors++;
-
-                if (rand(1, 1000000) <= 100) {
-                    $visitor = new Visitor(true);
-                } else {
-                    $visitor = new Visitor();
-                }
-
+                $visitor = new Visitor();
                 $gameChoice = rand(100, 10000) / 100;
 
                 if ($gameChoice <= self::CHANCE_TO_PLAY_SLOTS) {
@@ -276,21 +270,22 @@ class Casino
         if ($displayEcho) {
             echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
             $this->displayRevenue($budgetStartOfDay);
-	}
+        }
 
-	//$this->randomEvent();
+        //$this->randomEvent();
     }
 
-    private function randomEvent(): void {
-	$chance = (rand(100, 10000) / 100);
+    private function randomEvent(): void
+    {
+        $chance = (rand(100, 10000) / 100);
 
-	switch(true) {
-		case ($chance <= 1):
-		echo PHP_EOL;
+        switch (true) {
+            case ($chance <= 1):
+                echo PHP_EOL;
 
-		echo PHP_EOL;
-		break;
-	}
+                echo PHP_EOL;
+                break;
+        }
     }
 
     private function updateBudget($value): void
@@ -363,15 +358,32 @@ class Visitor
     private float $money;
     private int $gamesPlayed;
     private bool $moneyIsCounterfeit = false;
+    private bool $isMillionaire = false;
 
-    public function __construct($randomEventOneMillionBudget = false)
+    public function __construct()
     {
-        $this->money = $randomEventOneMillionBudget ? 1000000 : rand(50, 10000);
+        $randomEventIsMillionaire = mt_rand(1, 10000);
+        $randomEventHasCounterfeitMoney = mt_rand(1, 100);
+
+        $this->money = mt_rand(50, 10000);
         $this->gamesPlayed = 0;
 
-        if ($randomEventOneMillionBudget) {
+        if ($randomEventIsMillionaire < 1) {
+            $this->isMillionaire = true;
+        }
+
+        if ($randomEventHasCounterfeitMoney < 1) {
+            $this->moneyIsCounterfeit = true;
+        }
+
+        if ($this->isMillionaire && $this->moneyIsCounterfeit) {
+            echo "Ultra Rare Event: A customer with a million budget hat counterfeit money D: D: D:!\n";
+        } elseif ($this->isMillionaire) {
             echo PHP_EOL;
-            echo "Random Event! You have a visitor with a budget of 1 million! (Chance: 0.01 %)\n";
+            echo "Rare Event: You have a visitor with a budget of 1 million!\n";
+        } elseif ($this->moneyIsCounterfeit) {
+            echo PHP_EOL;
+            echo "Rare Event: One of your visitor had counterfeit money D: (you lose the potential winnings)!\n";
         }
     }
 
@@ -413,12 +425,12 @@ class Visitor
 
             $playCount++;
 
-            if ($this->calcuateChanceToStopPlaying($playCount)) {
+            if ($this->calculateChanceToStopPlaying($playCount)) {
                 break;
             }
         }
 
-        return $moneyBeforePlaying - $this->money;
+        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
     }
 
     public function playRoulette(
@@ -456,12 +468,12 @@ class Visitor
 
             $playCount++;
 
-            if ($this->calcuateChanceToStopPlaying($playCount)) {
+            if ($this->calculateChanceToStopPlaying($playCount)) {
                 break;
             }
         }
 
-        return $moneyBeforePlaying - $this->money;
+        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
     }
 
     public function playBlackJack($blackJackChances): float
@@ -488,15 +500,15 @@ class Visitor
 
             $playCount++;
 
-            if ($this->calcuateChanceToStopPlaying($playCount)) {
+            if ($this->calculateChanceToStopPlaying($playCount)) {
                 break;
             }
         }
 
-        return $moneyBeforePlaying - $this->money;
+        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
     }
 
-    private function calcuateChanceToStopPlaying($timesPlayedTheSameGame): bool
+    private function calculateChanceToStopPlaying($timesPlayedTheSameGame): bool
     {
         // chance that the player doesn't want to play anymore
         // maybe adjustable per game
@@ -505,5 +517,38 @@ class Visitor
         } else {
             return false;
         }
+    }
+
+    private function calculateVisitorsRevenue($moneyBeforePlaying): float
+    {
+        $diff = $moneyBeforePlaying - $this->money;
+
+        if($this->moneyIsCounterfeit) {
+            // since the visitor pays the chips with his counterfeit money, it is already within our system
+            // so him/her winning, doesn't mean he/she will get the same bills back
+            return ($moneyBeforePlaying - $this->money) + $moneyBeforePlaying;
+        }
+
+        return $moneyBeforePlaying - $this->money;
+
+//        $diff = $moneyBeforePlaying - $this->money;
+//
+//        // visitor won
+//        if ($diff < 0) {
+//            // counterfeit money true
+//            if ($this->moneyIsCounterfeit) {
+//                // since it's not likely he/she gets the same bills back, we have to subtract them anyway
+//                return ($moneyBeforePlaying * -1) + $diff;
+//            } else {
+//                return $diff;
+//            }
+//        } else {
+//            // visitor lost
+//
+//            if ($this->moneyIsCounterfeit) {
+//
+//            } else {
+//            }
+//        }
     }
 }
