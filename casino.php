@@ -276,7 +276,21 @@ class Casino
         if ($displayEcho) {
             echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
             $this->displayRevenue($budgetStartOfDay);
-        }
+	}
+
+	//$this->randomEvent();
+    }
+
+    private function randomEvent(): void {
+	$chance = (rand(100, 10000) / 100);
+
+	switch(true) {
+		case ($chance <= 1):
+		echo PHP_EOL;
+
+		echo PHP_EOL;
+		break;
+	}
     }
 
     private function updateBudget($value): void
@@ -348,6 +362,7 @@ class Visitor
 {
     private float $money;
     private int $gamesPlayed;
+    private bool $moneyIsCounterfeit = false;
 
     public function __construct($randomEventOneMillionBudget = false)
     {
@@ -356,7 +371,7 @@ class Visitor
 
         if ($randomEventOneMillionBudget) {
             echo PHP_EOL;
-            echo "Random Event! You have a visitor with a budget of 1 million!(Chance: 0.01 %)\n";
+            echo "Random Event! You have a visitor with a budget of 1 million! (Chance: 0.01 %)\n";
         }
     }
 
