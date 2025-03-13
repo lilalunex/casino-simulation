@@ -94,7 +94,6 @@ class Casino
                     while ($lengthBefore == strlen((string)abs(floor($this->budget)))) {
                         $this->simulate(1, false);
                     }
-                    echo PHP_EOL;
                     echo "Ran simulation for " . $this->date - $daysBefore . " day(s)." . PHP_EOL;
                     echo PHP_EOL;
                     echo "Total visitors: " . $this->totalVisitors - $visitorsBefore . PHP_EOL;
@@ -357,7 +356,7 @@ class Visitor
 {
     private float $money;
     private int $gamesPlayed;
-    private bool $moneyIsCounterfeit = false;
+    private bool $moneyIsCounterfeit = true;
     private bool $isMillionaire = false;
 
     public function __construct()
@@ -365,25 +364,29 @@ class Visitor
         $randomEventIsMillionaire = mt_rand(1, 10000);
         $randomEventHasCounterfeitMoney = mt_rand(1, 100);
 
+//        echo "randomEventIsMillionaire: $randomEventIsMillionaire" . PHP_EOL;
+//        echo "randomEventHasCounterfeitmoney: $randomEventHasCounterfeitMoney" . PHP_EOL;
+
         $this->money = mt_rand(50, 10000);
         $this->gamesPlayed = 0;
 
-        if ($randomEventIsMillionaire < 1) {
+        if ($randomEventIsMillionaire == 1) {
             $this->isMillionaire = true;
         }
 
-        if ($randomEventHasCounterfeitMoney < 1) {
+        if ($randomEventHasCounterfeitMoney == 1) {
             $this->moneyIsCounterfeit = true;
         }
 
         if ($this->isMillionaire && $this->moneyIsCounterfeit) {
             echo "Ultra Rare Event: A customer with a million budget hat counterfeit money D: D: D:!\n";
+            echo PHP_EOL;
         } elseif ($this->isMillionaire) {
-            echo PHP_EOL;
             echo "Rare Event: You have a visitor with a budget of 1 million!\n";
-        } elseif ($this->moneyIsCounterfeit) {
             echo PHP_EOL;
-            echo "Rare Event: One of your visitor had counterfeit money D: (you lose the potential winnings)!\n";
+        } elseif ($this->moneyIsCounterfeit) {
+            echo "Rare Event: One of your visitor bought chips with counterfeit money D:! (You lose this money)\n";
+            echo PHP_EOL;
         }
     }
 
@@ -521,34 +524,20 @@ class Visitor
 
     private function calculateVisitorsRevenue($moneyBeforePlaying): float
     {
+        // if diff positive = visitor lost, casino won
+        // if diff negative = visitor won, casino lost
         $diff = $moneyBeforePlaying - $this->money;
 
         if($this->moneyIsCounterfeit) {
-            // since the visitor pays the chips with his counterfeit money, it is already within our system
-            // so him/her winning, doesn't mean he/she will get the same bills back
-            return ($moneyBeforePlaying - $this->money) + $moneyBeforePlaying;
+            if($diff >= 0) {
+                return 0;
+            } else {
+                // since the visitor pays the chips with his counterfeit money, it is already within our system
+                // so him/her winning, doesn't mean he/she will get the same bills back
+                return $diff - $moneyBeforePlaying;
+            }
         }
 
-        return $moneyBeforePlaying - $this->money;
-
-//        $diff = $moneyBeforePlaying - $this->money;
-//
-//        // visitor won
-//        if ($diff < 0) {
-//            // counterfeit money true
-//            if ($this->moneyIsCounterfeit) {
-//                // since it's not likely he/she gets the same bills back, we have to subtract them anyway
-//                return ($moneyBeforePlaying * -1) + $diff;
-//            } else {
-//                return $diff;
-//            }
-//        } else {
-//            // visitor lost
-//
-//            if ($this->moneyIsCounterfeit) {
-//
-//            } else {
-//            }
-//        }
+        return $diff;
     }
 }
