@@ -186,6 +186,8 @@ to not hold on event + input to stop simulation
 
 [ ] Konami Cheat for moneys
 
+[ ] Build CLI version in rust to compare speed
+
 ---
 
 ## Future music
