@@ -190,6 +190,8 @@ to not hold on event + input to stop simulation
 
 [ ] purchasable: money to check if money is counterfeit
 
+[ ] improve EOL logic for consistency
+
 ---
 
 ## Future music
