@@ -356,7 +356,7 @@ class Visitor
 {
     private float $money;
     private int $gamesPlayed;
-    private bool $moneyIsCounterfeit = true;
+    private bool $moneyIsCounterfeit = false;
     private bool $isMillionaire = false;
 
     public function __construct()
