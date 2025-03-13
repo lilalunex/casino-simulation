@@ -188,6 +188,8 @@ to not hold on event + input to stop simulation
 
 [ ] Build CLI version in rust to compare speed
 
+[ ] purchasable: money to check if money is counterfeit
+
 ---
 
 ## Future music
