@@ -4,25 +4,25 @@
 use JetBrains\PhpStorm\NoReturn;
 
 $casino = new Casino();
-$casino->displayIntro();
+$casino->showWelcomeScreen();
 $casino->gameLoop();
 
 class Casino
 {
-    private float $budget;
-    private int $date;
+    private float $casinoBalance;
+    private int $dateStart;
     private bool $displayInstructions = true;
-    private int $totalDays = 0;
-    private int $totalVisitors = 0;
+    private int $simulatedDays = 0;
+    private int $customerCount = 0;
 
-    const int SECONDS_IN_A_DAY = 86400;
+    const int DAY_IN_SECONDS = 86400;
 
     const float CHANCE_TO_PLAY_SLOTS = 50;
     const float CHANCE_TO_PLAY_BLACK_JACK = 80;
     const float CHANCE_TO_PLAY_ROULETTE = 100;
 
     // Win Chances are from the view of the visitor/player
-    const array ROULETTE_BETS = [
+    const array ROULETTE_PAYOUTS = [
         'color' => ['chance' => 48.65, 'payout' => 2],
         'odd_even' => ['chance' => 48.65, 'payout' => 2],
         '18_numbers' => ['chance' => 48.65, 'payout' => 2],
@@ -35,12 +35,12 @@ class Casino
         'single_number' => ['chance' => 2.70, 'payout' => 36]
     ];
 
-    const array BLACKJACK_CHANCES = [
+    const array BLACKJACK_WIN_RATES = [
         'blackjack_win' => 4.83,
         'regular_win' => 42
     ];
 
-    const array SLOT_CHANCES = [
+    const array SLOT_MACHINE_OUTCOMES = [
         'jackpot_win' => ['chance' => 0.01, 'payout' => 1000],
         'mega_win' => ['chance' => 0.1, 'payout' => 100],
         'big_win' => ['chance' => 0.5, 'payout' => 50],
@@ -54,18 +54,18 @@ class Casino
     {
         // 946684800 = 01.01.2000
         // 2000 for an easy year to play around with
-        $this->budget = $budget;
-        $this->date = $date;
+        $this->casinoBalance = $budget;
+        $this->dateStart = $date;
     }
 
     public function gameLoop(): void
     {
-        while ($this->budget > 0) {
+        while ($this->casinoBalance > 0) {
 
             if ($this->displayInstructions) {
-                $this->displayDate();
-                $this->displayBudget();
-                $this->displayInstructions();
+                $this->showCurrentDate();
+                $this->showCasinoBalance();
+                $this->showOptionsMenu();
             }
 
             $this->displayInstructions = true;
@@ -75,35 +75,35 @@ class Casino
             switch (strtolower($input)) {
                 case '': // Enter
                 case '1':
-                    $this->simulate(1);
+                    $this->runSimulation(1);
                     break;
                 case '2':
-                    $this->simulate(7);
+                    $this->runSimulation(7);
                     break;
                 case '3':
-                    $this->simulate(31);
+                    $this->runSimulation(31);
                     break;
                 case '4':
-                    $this->simulate(365);
+                    $this->runSimulation(365);
                     break;
                 case '5':
-                    $lengthBefore = strlen((string)abs(floor($this->budget)));
-                    $daysBefore = $this->date;
-                    $visitorsBefore = $this->totalVisitors;
-                    $budgetBefore = $this->budget;
-                    while ($lengthBefore == strlen((string)abs(floor($this->budget)))) {
-                        $this->simulate(1, false);
+                    $lengthBefore = strlen((string)abs(floor($this->casinoBalance)));
+                    $daysBefore = $this->dateStart;
+                    $visitorsBefore = $this->customerCount;
+                    $budgetBefore = $this->casinoBalance;
+                    while ($lengthBefore == strlen((string)abs(floor($this->casinoBalance)))) {
+                        $this->runSimulation(1, false);
                     }
-                    echo "Ran simulation for " . $this->date - $daysBefore . " day(s)." . PHP_EOL;
+                    echo "Ran simulation for " . $this->dateStart - $daysBefore . " day(s)." . PHP_EOL;
                     echo PHP_EOL;
-                    echo "Total visitors: " . $this->totalVisitors - $visitorsBefore . PHP_EOL;
-                    $this->displayRevenue($budgetBefore);
+                    echo "Total visitors: " . $this->customerCount - $visitorsBefore . PHP_EOL;
+                    $this->showDailyProfit($budgetBefore);
                     break;
                 case ctype_digit($input):
-                    $this->simulate((int)$input);
+                    $this->runSimulation((int)$input);
                     break;
                 case 'h':
-                    $this->displayHelp();
+                    $this->showHelpText();
                     break;
                 case 'g':
                     $this->giveUp();
@@ -120,30 +120,30 @@ class Casino
                     echo PHP_EOL;
             }
 
-            if ($this->budget <= 0) {
+            if ($this->casinoBalance <= 0) {
                 $this->gameOver();
             }
         }
     }
 
-    private function displayDate(): void
+    private function showCurrentDate(): void
     {
-        echo "Date:   " . date("dS m Y", $this->date) . PHP_EOL;
+        echo "Date:   " . date("dS m Y", $this->dateStart) . PHP_EOL;
     }
 
-    private function displayBudget(): void
+    private function showCasinoBalance(): void
     {
-        echo "Budget: " . number_format($this->budget, 2) . " €" . PHP_EOL;
+        echo "Budget: " . number_format($this->casinoBalance, 2) . " €" . PHP_EOL;
     }
 
-    public function displayIntro(): void
+    public function showWelcomeScreen(): void
     {
         echo PHP_EOL;
         echo "Casino Simulation . " . PHP_EOL;
         echo PHP_EOL;
     }
 
-    private function displayInstructions(): void
+    private function showOptionsMenu(): void
     {
         echo PHP_EOL;
         echo "Choose what to do next" . PHP_EOL;
@@ -163,10 +163,10 @@ class Casino
         echo "Your input: ";
     }
 
-    private function displayHelp(): void
+    private function showHelpText(): void
     {
         echo PHP_EOL;
-        $this->displaySeparator();
+        $this->printDivider();
         echo PHP_EOL;
         echo "Casino Simulation:" . PHP_EOL;
 
@@ -189,36 +189,36 @@ class Casino
         echo PHP_EOL;
         echo "Game Statistics:" . PHP_EOL;
         echo "  Roulette Bets:" . PHP_EOL;
-        foreach (self::ROULETTE_BETS as $bet => $info) {
+        foreach (self::ROULETTE_PAYOUTS as $bet => $info) {
             echo "    - " . ucfirst(str_replace('_', ' ', $bet)) . ": " .
                 "Chance: " . $info['chance'] . "%, " .
                 "Payout: " . $info['payout'] . "x" . PHP_EOL;
         }
         echo PHP_EOL;
         echo "  Blackjack Chances:" . PHP_EOL;
-        foreach (self::BLACKJACK_CHANCES as $outcome => $chance) {
+        foreach (self::BLACKJACK_WIN_RATES as $outcome => $chance) {
             echo "    - " . ucfirst(str_replace('_', ' ', $outcome)) . ": " .
                 "Chance: " . $chance . "%" . PHP_EOL;
         }
         echo PHP_EOL;
         echo "  Slot Machine Wins:" . PHP_EOL;
-        foreach (self::SLOT_CHANCES as $winType => $info) {
+        foreach (self::SLOT_MACHINE_OUTCOMES as $winType => $info) {
             echo "    - " . ucfirst(str_replace('_', ' ', $winType)) . ": " .
                 "Chance: " . $info['chance'] . "%, " .
                 "Payout: " . $info['payout'] . "x" . PHP_EOL;
         }
         echo PHP_EOL;
-        $this->displaySeparator();
+        $this->printDivider();
     }
 
-    private function simulate($days, $displayEcho = true): void
+    private function runSimulation($days, $displayEcho = true): void
     {
         $visitorsThisSimulation = 0;
         $totalRevenue = 0;
-        $budgetStartOfDay = $this->budget;
+        $budgetStartOfDay = $this->casinoBalance;
 
         if ($displayEcho) {
-            $this->displaySeparator();
+            $this->printDivider();
             echo PHP_EOL;
             echo "Running simulation for $days day(s)." . PHP_EOL;
             echo PHP_EOL;
@@ -233,26 +233,26 @@ class Casino
             // for evey visitor for this day
             for ($j = 0; $j < $visitors; $j++) {
 
-                $this->totalVisitors++;
-                $visitor = new Visitor();
+                $this->customerCount++;
+                $visitor = new Customer();
                 $gameChoice = mt_rand(100, 10000) / 100;
 
                 if ($gameChoice <= self::CHANCE_TO_PLAY_SLOTS) {
-                    $this->updateBudget(
+                    $this->adjustCasinoBalance(
                         $visitor->playSlots(
-                            self::SLOT_CHANCES
+                            self::SLOT_MACHINE_OUTCOMES
                         ));
                 } elseif ($gameChoice <= self::CHANCE_TO_PLAY_ROULETTE) {
                     // Roulette
-                    $this->updateBudget(
+                    $this->adjustCasinoBalance(
                         $visitor->playRoulette(
-                            self::ROULETTE_BETS
+                            self::ROULETTE_PAYOUTS
                         ));
                 } elseif ($gameChoice <= self::CHANCE_TO_PLAY_BLACK_JACK) {
                     // Black Jack
-                    $this->updateBudget(
+                    $this->adjustCasinoBalance(
                         $visitor->playBlackJack(
-                            self::BLACKJACK_CHANCES
+                            self::BLACKJACK_WIN_RATES
                         ));
                 }
 
@@ -268,7 +268,7 @@ class Casino
 
         if ($displayEcho) {
             echo "Total visitors: $visitorsThisSimulation" . PHP_EOL;
-            $this->displayRevenue($budgetStartOfDay);
+            $this->showDailyProfit($budgetStartOfDay);
         }
 
         //$this->randomEvent();
@@ -287,9 +287,9 @@ class Casino
         }
     }
 
-    private function updateBudget($value): void
+    private function adjustCasinoBalance($value): void
     {
-        $this->budget += $value;
+        $this->casinoBalance += $value;
     }
 
     /**
@@ -299,15 +299,15 @@ class Casino
      */
     private function updateDate(int $days): void
     {
-        $this->totalDays += $days;
-        $this->date += $days * self::SECONDS_IN_A_DAY;
+        $this->simulatedDays += $days;
+        $this->dateStart += $days * self::DAY_IN_SECONDS;
     }
 
     private function giveUp(): void // Loser...
     {
         echo "Loser..." . PHP_EOL;
         echo PHP_EOL;
-        $this->budget = 0;
+        $this->casinoBalance = 0;
     }
 
     //    private function gameOver($totalRevenue, $i)
@@ -316,9 +316,9 @@ class Casino
         //        $this->totalDays += $i;
 
         //        echo "Lost after simulating: $i day(s)" . PHP_EOL;
-        echo "Lost on Date: " . date("dS m Y", $this->date) . PHP_EOL;
-        echo "Lost after days: " . $this->totalDays . PHP_EOL;
-        echo "Total visitors: " . $this->totalVisitors . PHP_EOL;
+        echo "Lost on Date: " . date("dS m Y", $this->dateStart) . PHP_EOL;
+        echo "Lost after days: " . $this->simulatedDays . PHP_EOL;
+        echo "Total visitors: " . $this->customerCount . PHP_EOL;
         //        if ($this->budget > $totalRevenue) {
         //            echo "Casino won: " . (number_format($this->budget - $totalRevenue)) . " €" . PHP_EOL;
         //        } else {
@@ -330,7 +330,7 @@ class Casino
         exit;
     }
 
-    private function displaySeparator(): void
+    private function printDivider(): void
     {
         echo "__________________________________________" . PHP_EOL;
     }
@@ -339,25 +339,25 @@ class Casino
      * @param float $budgetBefore
      * @return void
      */
-    public function displayRevenue(float $budgetBefore): void
+    public function showDailyProfit(float $budgetBefore): void
     {
-        if ($this->budget > $budgetBefore) {
-            echo "Casino won: " . (number_format($this->budget - $budgetBefore)) . " €" . PHP_EOL;
+        if ($this->casinoBalance > $budgetBefore) {
+            echo "Casino won: " . (number_format($this->casinoBalance - $budgetBefore)) . " €" . PHP_EOL;
         } else {
-            echo "Casino lost: " . (number_format($budgetBefore - $this->budget)) . " €" . PHP_EOL;
+            echo "Casino lost: " . (number_format($budgetBefore - $this->casinoBalance)) . " €" . PHP_EOL;
         }
         echo PHP_EOL;
-        $this->displaySeparator();
+        $this->printDivider();
         echo PHP_EOL;
     }
 }
 
-class Visitor
+class Customer
 {
     private float $money;
     private int $gamesPlayed;
-    private bool $moneyIsCounterfeit = false;
-    private bool $isMillionaire = false;
+    private bool $hasFakeMoney = false;
+    private bool $isMillionaire = false; // other name option: highRoller
 
     public function __construct()
     {
@@ -372,17 +372,17 @@ class Visitor
         }
 
         if ($randomEventHasCounterfeitMoney == 1) {
-            $this->moneyIsCounterfeit = true;
+            $this->hasFakeMoney = true;
         }
 
-        if ($this->isMillionaire && $this->moneyIsCounterfeit) {
+        if ($this->isMillionaire && $this->hasFakeMoney) {
             echo PHP_EOL;
             echo "Ultra Rare Event: A customer with a million budget hat counterfeit money D: D: D:!\n";
             echo PHP_EOL;
         } elseif ($this->isMillionaire) {
             echo "Rare Event: You have a visitor with a budget of 1 million!\n";
             echo PHP_EOL;
-        } elseif ($this->moneyIsCounterfeit) {
+        } elseif ($this->hasFakeMoney) {
             echo "Rare Event: One of your visitor bought chips with counterfeit money D:! (You lose this money)\n";
             echo PHP_EOL;
         }
@@ -416,7 +416,7 @@ class Visitor
             }
         }
 
-        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
+        return $this->calculateCasinoEarnings($moneyBeforePlaying);
     }
 
     public function playRoulette(
@@ -456,7 +456,7 @@ class Visitor
             }
         }
 
-        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
+        return $this->calculateCasinoEarnings($moneyBeforePlaying);
     }
 
     public function playBlackJack($blackJackChances): float
@@ -482,7 +482,7 @@ class Visitor
             }
         }
 
-        return $this->calculateVisitorsRevenue($moneyBeforePlaying);
+        return $this->calculateCasinoEarnings($moneyBeforePlaying);
     }
 
     private function calculateChanceToStopPlaying($timesPlayedTheSameGame): bool
@@ -496,13 +496,13 @@ class Visitor
         }
     }
 
-    private function calculateVisitorsRevenue($moneyBeforePlaying): float
+    private function calculateCasinoEarnings($moneyBeforePlaying): float
     {
         // if diff positive = visitor lost, casino won
         // if diff negative = visitor won, casino lost
         $diff = $moneyBeforePlaying - $this->money;
 
-        if($this->moneyIsCounterfeit) {
+        if($this->hasFakeMoney) {
             if($diff >= 0) {
                 return 0;
             } else {
