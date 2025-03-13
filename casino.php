@@ -228,14 +228,14 @@ class Casino
         for ($i = 0; $i < $days; $i++) {
 
             // simulating we will have 50-200 visitors per day
-            $visitors = rand(50, 200);
+            $visitors = mt_rand(50, 200);
 
             // for evey visitor for this day
             for ($j = 0; $j < $visitors; $j++) {
 
                 $this->totalVisitors++;
                 $visitor = new Visitor();
-                $gameChoice = rand(100, 10000) / 100;
+                $gameChoice = mt_rand(100, 10000) / 100;
 
                 if ($gameChoice <= self::CHANCE_TO_PLAY_SLOTS) {
                     $this->updateBudget(
@@ -276,7 +276,7 @@ class Casino
 
     private function randomEvent(): void
     {
-        $chance = (rand(100, 10000) / 100);
+        $chance = (mt_rand(100, 10000) / 100);
 
         switch (true) {
             case ($chance <= 1):
@@ -395,8 +395,8 @@ class Visitor
 
         while ($this->money > 0) {
             $this->gamesPlayed++;
-            $bet = min(rand(5, 100), $this->money);
-            $winChance = rand(0, 10000);
+            $bet = min(mt_rand(5, 100), $this->money);
+            $winChance = mt_rand(0, 10000);
 
             $this->money += match (true) {
                 $winChance <= $slotChances['jackpot_win']['chance'] => ($bet * $slotChances['jackpot_win']['payout']) - $bet,
@@ -430,14 +430,14 @@ class Visitor
             $this->gamesPlayed++;
 
             // simulating the player choose between 1-9 bets per round
-            $amountOfBets = rand(1, 9);
+            $amountOfBets = mt_rand(1, 9);
 
             // making also the choosen games random
             $choosenVariants = (array)array_rand($rouletteBets, $amountOfBets);
 
             foreach ($choosenVariants as $choosenVariant) {
-                $bet = min(rand(5, 100), $this->money);
-                $winChance = rand(0, 10000) / 100;
+                $bet = min(mt_rand(5, 100), $this->money);
+                $winChance = mt_rand(0, 10000) / 100;
 
                 $chance = $rouletteBets[$choosenVariant]['chance'];
                 $payout = $rouletteBets[$choosenVariant]['payout'];
@@ -466,8 +466,8 @@ class Visitor
 
         while ($this->money > 0) {
             $this->gamesPlayed++;
-            $bet = min(rand(5, 100), $this->money);
-            $winChance = rand(0, 10000) / 100;
+            $bet = min(mt_rand(5, 100), $this->money);
+            $winChance = mt_rand(0, 10000) / 100;
 
             $this->money += match (true) {
                 $winChance <= $blackJackChances['blackjack_win'] => $bet * 1.5,
@@ -489,7 +489,7 @@ class Visitor
     {
         // chance that the player doesn't want to play anymore
         // maybe adjustable per game
-        if (100 < (rand(1, 5) * $timesPlayedTheSameGame)) {
+        if (100 < (mt_rand(1, 5) * $timesPlayedTheSameGame)) {
             return true;
         } else {
             return false;
