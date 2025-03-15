@@ -1,4 +1,4 @@
-# Casino Simulation
+ # Casino Simulation
 
 A fun little idea to learn / improve on my PHP.
 
@@ -191,6 +191,10 @@ to not hold on event + input to stop simulation
 [ ] purchasable: money to check if money is counterfeit
 
 [ ] improve EOL logic for consistency
+
+[ ] game modes: regular, play one day per real life day
+
+[ ] daily login bonus
 
 ---
 
