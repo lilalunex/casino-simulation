@@ -196,6 +196,8 @@ to not hold on event + input to stop simulation
 
 [ ] daily login bonus
 
+[ ] Random Event User Input: -> Friend asks you to loan money -> Chance to gain money / Chance to never see tha Loan again
+
 ---
 
 ## Future music
