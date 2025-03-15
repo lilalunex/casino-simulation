@@ -196,7 +196,15 @@ to not hold on event + input to stop simulation
 
 [ ] daily login bonus
 
-[ ] Random Event User Input: -> Friend asks you to loan money -> Chance to gain money / Chance to never see tha Loan again
+[ ] Random Event User Input: -> Friend asks you to loan money -> Chance to gain money / Chance to never see tha Loan 
+again
+
+[ ] Idea -> buy better slot machines -> Higher chances for the casino to win -> chances adjustable when casino is 
+closed overnight -> customer will visit you less if they win less and less (so the player doesn't just win 100% and 
+gets penalty for greed)
+
+[ ] Feature: Moving city. Make the starting city having a population of 20k. Customers remember they experience. 
+Opens up features like reputation. Option: Move Casino Location for money -> reset reputation -> exploit other people 
 
 ---
 
