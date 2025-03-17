@@ -206,6 +206,8 @@ gets penalty for greed)
 [ ] Feature: Moving city. Make the starting city having a population of 20k. Customers remember they experience. 
 Opens up features like reputation. Option: Move Casino Location for money -> reset reputation -> exploit other people 
 
+[ ] Define echo Texts in nowdocs or vars. Maybe create a class just for that.
+
 ---
 
 ## Future music
