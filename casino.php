@@ -1,5 +1,5 @@
 #!/usr/bin/php
-<?php declare(strict_types=1);
+<?php
 
 use JetBrains\PhpStorm\NoReturn;
 
@@ -60,69 +60,60 @@ class Casino
 
     public function gameLoop(): void
     {
-        while ($this->casinoBalance > 0) {
-
-            if ($this->displayInstructions) {
-                $this->showCurrentDate();
-                $this->showCasinoBalance();
-                $this->showOptionsMenu();
+        if (php_sapi_name() === 'cli') {
+            while ($this->casinoBalance > 0) {
+                $this->processTurn();
             }
+        } else {
+            $this->processTurn();
+        }
+    }
 
-            $this->displayInstructions = true;
+    private function processTurn(): void
+    {
+        if ($this->displayInstructions) {
+            $this->showCurrentDate();
+            $this->showCasinoBalance();
+            $this->showOptionsMenu();
+        }
 
+        $this->displayInstructions = true;
+
+        if (php_sapi_name() === 'cli') {
             $input = trim(fgets(STDIN));
+        } else {
+            $input = $_POST['action'] ?? 'default';
+        }
 
-            switch (strtolower($input)) {
-                case '': // Enter
-                case '1':
-                    $this->runSimulation(1);
-                    break;
-                case '2':
-                    $this->runSimulation(7);
-                    break;
-                case '3':
-                    $this->runSimulation(31);
-                    break;
-                case '4':
-                    $this->runSimulation(365);
-                    break;
-                case '5':
-                    $lengthBefore = strlen((string)abs(floor($this->casinoBalance)));
-                    $daysBefore = $this->dateStart;
-                    $visitorsBefore = $this->customerCount;
-                    $budgetBefore = $this->casinoBalance;
-                    while ($lengthBefore == strlen((string)abs(floor($this->casinoBalance)))) {
-                        $this->runSimulation(1, false);
-                    }
-                    echo "Ran simulation for " . $this->dateStart - $daysBefore . " day(s)." . PHP_EOL;
-                    echo PHP_EOL;
-                    echo "Total visitors: " . $this->customerCount - $visitorsBefore . PHP_EOL;
-                    $this->showDailyProfit($budgetBefore);
-                    break;
-                case ctype_digit($input):
-                    $this->runSimulation((int)$input);
-                    break;
-                case 'h':
-                    $this->showHelpText();
-                    break;
-                case 'g':
-                    $this->giveUp();
-                    break;
-                case 'e':
-                    echo "Exiting . " . PHP_EOL;
-                    echo PHP_EOL;
-                    exit;
-                default:
-                    $this->displayInstructions = false;
-                    echo PHP_EOL;
-                    echo "Invalid input . Please try again . " . PHP_EOL;
-                    echo "Your input: ";
-                    echo PHP_EOL;
-            }
+        switch (strtolower($input)) {
+            case '1':
+                $this->runSimulation(1);
+                break;
+            case '2':
+                $this->runSimulation(7);
+                break;
+            case '3':
+                $this->runSimulation(31);
+                break;
+            case '4':
+                $this->runSimulation(365);
+                break;
+            case 'h':
+                $this->showHelpText();
+                break;
+            case 'g':
+                $this->giveUp();
+                break;
+            case 'e':
+                echo "Exiting... ";
+                exit;
+            default:
+                echo "Invalid input. Please try again.";
+                return;
+        }
 
-            if ($this->casinoBalance <= 0) {
-                $this->gameOver();
-            }
+        if ($this->casinoBalance <= 0) {
+            $this->gameOver();
         }
     }
 
@@ -211,7 +202,7 @@ class Casino
         $this->printDivider();
     }
 
-    private function runSimulation($days, $displayEcho = true): void
+    public function runSimulation($days, $displayEcho = true): void
     {
         $visitorsThisSimulation = 0;
         $totalRevenue = 0;
@@ -502,8 +493,8 @@ class Customer
         // if diff negative = visitor won, casino lost
         $diff = $moneyBeforePlaying - $this->money;
 
-        if($this->hasFakeMoney) {
-            if($diff >= 0) {
+        if ($this->hasFakeMoney) {
+            if ($diff >= 0) {
                 return 0;
             } else {
                 // since the visitor pays the chips with his counterfeit money, it is already within our system
