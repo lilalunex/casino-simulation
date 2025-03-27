@@ -1,43 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casino Simulation</title>
-</head>
-<body>
-<h1>Casino Simulation</h1>
-
 <?php
-require_once 'casino.php';
+
+ini_set('display_errors', 1);  // Enable displaying errors
+error_reporting(E_ALL);        // Report all types of errors
+
+
+$_GET['arg'] = 'web';
+
+require_once 'src/casino.php';
 
 $casino = new Casino();
-ob_start();
-$casino->showWelcomeScreen();
-$output = ob_get_clean();
-//echo nl2br($output);
+
+$output = '';
+$lost = false;
+
+if (isset($_POST['simulate1'])) {
+    ob_start();
+    $casino->runSimulation(1);
+    $output = ob_get_clean();
+} else if (isset($_POST['simulate7'])) {
+    ob_start();
+    $casino->runSimulation(7);
+    $output = ob_get_clean();
+} else if (isset($_POST['simulate30'])) {
+    ob_start();
+    $casino->runSimulation(31);
+    $output = ob_get_clean();
+} else if (isset($_POST['simulate365'])) {
+    ob_start();
+    $casino->runSimulation(365);
+    $output = ob_get_clean();
+} else if (isset($_POST['giveup'])) {
+    ob_start();
+    $casino->giveUp();
+    $lost = true;
+    $output = ob_get_clean();
+} else if (isset($_POST['restart'])) {
+    $casino->restart();
+    $lost = false;
+    $output = 'Casino restarted.';
+} else if (isset($_POST['customDays'])) {
+    $customDays = intval($_POST['customDays']);
+    if ($customDays > 0) {
+        ob_start();
+        $casino->runSimulation($customDays);
+        $output = ob_get_clean();
+    }
+}
+
 ?>
 
-<form action="index.php" method="POST">
-    <label for="action">Choose an option:
-        <select name="action">
-            <option value="1">Simulate a day</option>
-            <option value="7">Simulate a week</option>
-            <option value="31">Simulate a month</option>
-            <option value="365">Simulate a year</option>
-        </select>
-    </label>
-    <button type="submit">Run Simulation</button>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        h1 {
+            margin: 0 !important;
+        }
+
+        button {
+            padding: .5rem 1.5rem;
+        }
+    </style>
+</head>
+<body style="max-width: 1440px; margin-left: auto; margin-right: auto; padding: 1.5rem; font-size: 20px; position:relative;">
+<p style="position:absolute; right: 0; text-align: right">
+    <a href="https://lilalunex.dev/" style="text-decoration: none">Back to lilalunex.dev</a><br><br>
+    <a href='https://github.com/lilalunex/casino-simulation/' target='_blank'
+       style="text-decoration: none">GitHub Link</a>, there you will also find all the other ideas I
+    have to build uopen this.</p>
+<?php
+$casino->showWelcomeScreen();
+?>
+<?php
+$casino->gameLoop();
+?>
+
+<form method="POST">
+    <?php if (!$lost): ?>
+        <button type="submit" name="simulate1">Simulate 1 day</button>
+        <button type="submit" name="simulate7">Simulate 1 week</button>
+        <button type="submit" name="simulate30">Simulate 30 days</button>
+        <button type="submit" name="simulate365">Simulate 365 days</button>
+        <br><br>
+        <label for="customDays">Enter number of days to simulate:
+            <input type="number" name="customDays" min="1" placeholder="e.g., 10">
+        </label>
+        <button type="submit">Simulate Custom Days</button>
+        <br><br>
+        <button type="submit" name="giveup">Give up</button>
+    <?php else: ?>
+        <button type="submit" name="restart">Restart</button>
+    <?php endif ?>
 </form>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $days = intval($_POST["action"] ?? 1);
-    ob_start();
-    $casino->runSimulation($days);
-    $simulationResult = ob_get_clean();
-    echo nl2br($simulationResult);
-}
-?>
+<?php if ($output): ?>
+    <div>
+        <strong>Simulation Result:</strong><br>
+        <?php echo $output; ?>
+    </div>
+<?php endif; ?>
+
+
+<div style="padding-top: 3rem;">
+    <button style="margin-left: auto; display: block" onclick="toggleHelp()">Information</button>
+    <div id="help" style="display: none">
+        <?php
+        $casino->showHelpText();
+        ?>
+    </div>
+</div>
+<script>
+    function toggleHelp() {
+        var helpElement = document.getElementById("help");
+        if (helpElement.style.display === "none") {
+            helpElement.style.display = "block";
+        } else {
+            helpElement.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>

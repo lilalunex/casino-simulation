@@ -4,11 +4,17 @@ A fun little idea to learn / improve on my PHP.
 
 ---
 
-## run
+## run in cli
 
-CLI
 ```
-php casino.php
+php casino-cli.php
+```
+
+___
+
+## play at 
+```
+https://lilalunex.dev/casino-simulation/index.php
 ```
 
 ---
@@ -105,6 +111,8 @@ Only tested on my Windows machine.
 ---
 
 ## Ideas / CANDOs:
+
+[ ] Print day of random event
 
 [ ] Chance user plays with counterfeit money -> The casino doesn't recognize at first -> So loses that money -> 
 echo stats & info for that
