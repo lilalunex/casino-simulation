@@ -64,11 +64,12 @@ if (isset($_POST['simulate1'])) {
     </style>
 </head>
 <body style="max-width: 1440px; margin-left: auto; margin-right: auto; padding: 1.5rem; font-size: 20px; position:relative;">
-<p style="position:absolute; right: 0; text-align: right">
-    <a href="https://lilalunex.dev/" style="text-decoration: none">Back to lilalunex.dev</a><br><br>
+<p>
     <a href='https://github.com/lilalunex/casino-simulation/' target='_blank'
        style="text-decoration: none">GitHub Link</a>, there you will also find all the other ideas I
-    have to build uopen this.</p>
+    have to build uopen this.<br><br>
+    <a href="https://lilalunex.dev/" style="text-decoration: none">Back to lilalunex.dev</a>
+</p>
 <?php
 $casino->showWelcomeScreen();
 ?>
