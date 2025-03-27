@@ -86,6 +86,7 @@ class Casino
         }
 
         switch (strtolower($input)) {
+            case '':
             case '1':
                 $this->runSimulation(1);
                 break;
