@@ -6,32 +6,29 @@
     <title>Casino Simulation</title>
 </head>
 <body>
-<h1>Casino Simulation 2</h1>
+<h1>Casino Simulation</h1>
 
 <?php
 require_once 'casino.php';
-var_dump(class_exists('Casino'));
-
 
 $casino = new Casino();
-ob_start(); // Capture output
+ob_start();
 $casino->showWelcomeScreen();
-$output = ob_get_clean(); // Store output in variable
-echo nl2br($output); // Convert newlines to HTML <br>
+$output = ob_get_clean();
+//echo nl2br($output);
 ?>
 
 <form action="index.php" method="POST">
-    <label for="action">Choose an option:</label>
-    <select name="action">
-        <option value="1">Simulate a day</option>
-        <option value="7">Simulate a week</option>
-        <option value="31">Simulate a month</option>
-        <option value="365">Simulate a year</option>
-    </select>
+    <label for="action">Choose an option:
+        <select name="action">
+            <option value="1">Simulate a day</option>
+            <option value="7">Simulate a week</option>
+            <option value="31">Simulate a month</option>
+            <option value="365">Simulate a year</option>
+        </select>
+    </label>
     <button type="submit">Run Simulation</button>
 </form>
-
-<div>hi</div>
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -131,7 +131,7 @@ class Casino
     public function showWelcomeScreen(): void
     {
         echo PHP_EOL;
-        echo "Casino Simulation . " . PHP_EOL;
+        echo strip_tags("<p>Casino Simulation" . "</p>") . PHP_EOL;
         echo PHP_EOL;
     }
 
